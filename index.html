@@ -69,6 +69,9 @@
                                 <a href="#portfolio" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary cp-nav cp-glitch" style="font-family: JetBrains Mono, serif;">Portfolio</a>
                             </li>
                             <li class="group">
+                                <a href="#certificate" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary cp-nav cp-glitch" style="font-family: JetBrains Mono, serif;">Certificate</a>
+                            </li>
+                            <li class="group">
                                 <a href="#blog" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary cp-nav cp-glitch" style="font-family: JetBrains Mono, serif;">Blog</a>
                             </li>
                             <li class="group">
@@ -232,6 +235,13 @@
                         </div>
                     </div>
                 </div>
+                <!-- Hologram 3D wireframe -->
+                <div class="cp-reveal w-full px-4 lg:w-1/2">
+                    <div class="holo-wrap">
+                        <canvas id="holo" aria-hidden="true"></canvas>
+                        <span class="holo-label">[ HOLO-01 // idle rotation ]</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -347,6 +357,34 @@
     Clients Section End -->
 
     
+    <!-- Certificate Section Start -->
+
+    <section id="certificate" class="pt-36 pb-20 bg-darkred">
+        <div class="container">
+            <div class="w-full px-4">
+                <div class="cp-reveal cp-reveal-slice max-w-xl mx-auto text-center mb-16">
+                    <h4 class="font-semibold text-lg text-primary cp-glitch mb-2" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">Certificate</span>]</h4>
+                    <h2 class="font-bold text-youngcyan text-3xl mb-4 sm:text-4xl lg:text-5xl">Credentials</h2>
+                    <p class="font-medium text-md text-white md:text-lg">Professional certifications, academic achievements, and courses I have completed. Click any card to view the full certificate.</p>
+                </div>
+            </div>
+            <div class="w-full px-4">
+                <div id="cert-grid" class="cert-grid"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Jendela perbesar sertifikat -->
+    <div id="cert-box" class="cert-box" role="dialog" aria-modal="true" aria-label="Tampilan penuh sertifikat">
+        <div class="cert-box__inner">
+            <button type="button" class="cert-box__close" aria-label="Tutup">&times;</button>
+            <img class="cert-box__img" src="" alt="">
+            <p class="cert-box__cap"></p>
+        </div>
+    </div>
+
+    <!-- Certificate Section End -->
+
     <!-- BLog Card Section Start -->
 
     <section id="blog" class="pt-36 pb-20 bg-gradient-to-b from-darkred to-darkblue">
@@ -461,6 +499,9 @@
                             <a href="#clients" class="inline-block text-base hover:text-primary cp-glitch mb-3">Clients</a>
                         </li> -->
                         <li>
+                            <a href="#certificate" class="inline-block text-base hover:text-primary cp-glitch mb-3">Certificate</a>
+                        </li>
+                        <li>
                             <a href="#blog" class="inline-block text-base hover:text-primary cp-glitch mb-3">Blog</a>
                         </li>
                         <li>
@@ -553,5 +594,7 @@
      <!-- Footer End -->
 
 <script src="src/js/script.js"></script>
+<script src="src/js/holo-geo.js"></script>
+<script src="src/js/hologram.js"></script>
 </body>
 </html>
