@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Oxygen:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="src/output.css" rel="stylesheet">
     <link rel="stylesheet" href="src/style.css">
+    <link rel="stylesheet" href="src/cyberpunk.css">
     <title>PortFo Nugroho</title>
     <style>
         body {
@@ -26,7 +27,7 @@
         <div class="container">
             <div class="flex items-center justify-between relative">
                 <div class="px-4">
-                    <a href="#home" class="font-bold text-3xl text-youngred block py-6" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">NAW</span>]</a>
+                    <a href="#home" class="font-bold text-3xl text-youngred block py-6 cp-glitch" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">NAW</span>]</a>
                 </div>
                 <div class="flex items-center px-4">
                     <button id="hamburger" name="hamburger" type="button" 
@@ -38,19 +39,19 @@
                     <nav id="nav-menu" class="hidden absolute py-5 bg-youngred shadow-lg rounded-lg max-w-[250px] w-full right-4 top-full lg:block lg:static lg:bg-transparent lg:max-w-full lg:shadow-none lg:rounded-none">
                         <ul class="block lg:flex">
                             <li class="group">
-                                <a href="#home" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary" style="font-family: JetBrains Mono, serif;">Home</a>
+                                <a href="#home" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary cp-nav cp-glitch" style="font-family: JetBrains Mono, serif;">Home</a>
                             </li>
                             <li class="group">
-                                <a href="#about" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary" style="font-family: JetBrains Mono, serif;">About</a>
+                                <a href="#about" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary cp-nav cp-glitch" style="font-family: JetBrains Mono, serif;">About</a>
                             </li>
                             <li class="group">
-                                <a href="#portfolio" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary" style="font-family: JetBrains Mono, serif;">Portfolio</a>
+                                <a href="#portfolio" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary cp-nav cp-glitch" style="font-family: JetBrains Mono, serif;">Portfolio</a>
                             </li>
                             <li class="group">
-                                <a href="#blog" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary" style="font-family: JetBrains Mono, serif;">Blog</a>
+                                <a href="#blog" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary cp-nav cp-glitch" style="font-family: JetBrains Mono, serif;">Blog</a>
                             </li>
                             <li class="group">
-                                <a href="#contact" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary" style="font-family: JetBrains Mono, serif;">Contact</a>
+                                <a href="#contact" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary cp-nav cp-glitch" style="font-family: JetBrains Mono, serif;">Contact</a>
                             </li>
                         </ul>
                     </nav>
@@ -63,21 +64,22 @@
 
     <!-- Hero Section Start -->
     <section id="home" class="pt-36">
+        <div class="cp-bars"></div>
         <div class="container">
             <div class="flex flex-wrap">
                 <div class="w-full self-center px-4 lg:w-1/2">
-                    <h1 class="block font-bold text-youngred text-5xl mt-1 mb-3 lg:text-5xl" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">Nugroho Agung Wibisono</span>]</h1>
+                    <h1 class="block font-bold text-youngred text-5xl mt-1 mb-3 lg:text-5xl cp-glitch" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">Nugroho Agung Wibisono</span>]</h1>
                     <h2 class="font-medium text-white text-lg mb-5 lg:text-2xl"> Student 
                         <span class="text-youngred font-semibold">| UI/UX Enthusiast</span></h2>
-                    <p class="font-semi text-youngred mb-10 leading-relaxed" style="font-family: JetBrains Mono, serif;">
+                    <p class="font-semi text-youngred mb-10 leading-relaxed cp-flicker" style="font-family: JetBrains Mono, serif;">
                         Focus on <span class="font-bold">YOUR GOAL</span></p>
                     <a href="#about" class="text-base font-semibold text-darkblack bg-youngcyan 
-                    py-3 px-8 rounded-md hover:scale-110 hover:shadow-lg hover:bg-red
+                    py-3 px-8 cp-btn hover:scale-110 hover:shadow-lg hover:bg-primary
                     hover:text-white transition duration-300 ease-in-out" style="font-family: JetBrains Mono, serif;">
                     See more about me</a>
                 </div>
                 <div class="w-full self-end px-4 lg:w-1/2">
-                    <div class="relative mt-10 lg:mt-9 right-0">
+                    <div class="relative mt-10 lg:mt-9 right-0 cp-hud4">
                         <img src="src/img/prof-nug_rem1.png" alt="Nugroho Agung Wibisono" class="max-w-full mx-auto"/>
                         <span class="absolute bottom-0 -z-10 left-1/2 -translate-x-1/2 md:scale-125">
                             <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" id="SvgjsSvg7133" width="360" height="360" x="0" y="0" style="enable-background:new 0 0 512 512" version="1.1" viewBox="0 0 512 512" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs">
@@ -113,19 +115,19 @@
         <div class="container">
             <div class="flex flex-wrap">
                 <div class="w-full px-4 mb-10">
-                    <h2 class="font-bold text-youngred text-2xl mb-5" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">About me</span>]</h2>
+                    <h2 class="font-bold text-primary cp-glitch text-2xl mb-5" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">About me</span>]</h2>
                     
                     <p class="font-medium text-base text-red lg:text-lg mb-5">Hi! I am <span class="font-bold text-youngcyan">Nugroho Agung Wibisono</span>,  an Informatics Engineering student at Mercu Buana University (class of 2022) with a strong ambition to become a Software Developer, passionate about designing and developing efficient, scalable, and user-centric digital solutions.</p>
                     <p class="font-medium text-base text-red lg:text-lg mb-5">I specialize in software development, system analysis, and object-oriented analysis & design (OOAD). My expertise includes C++, Python, JavaScript, React.js, HTML, CSS, Java and PHP, along with experience in database management, UML modeling, and UI/UX design using Figma.</p>
                     <p class="font-bold text-base text-red lg:text-lg mb-3">With a strong analytical mindset and problem-solving skills, I aim to build robust software systems that enhance user experience and business efficiency. Let’s connect and collaborate to innovate and solve complex challenges together! 🚀</p>
                 </div>
                 <div class="w-full px-4 lg:w-1/2">
-                    <h3 class="font-semibold text-youngred text-2xl mb-4 lg:text-3xl lg:pt-10" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">Let’s Connect</span>]</h3>
+                    <h3 class="font-semibold text-primary cp-glitch text-2xl mb-4 lg:text-3xl lg:pt-10" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">Let’s Connect</span>]</h3>
                     <p class="font-medium text-base lg:text-lg text-red mb-6">I’m always open to collaborating, sharing ideas, and discussing Software Developing, System Analysis, and all things tech. Whether you have an exciting project, want to exchange insights, or just want to connect, feel free to reach out!</p>
                     <p class="font-medium text-base lg:text-lg text-red mb-6">You can explore more about my experiences, skills, and projects in my CV. It highlights my journey in Software Development, UI/UX Design, and System Analysis, showcasing my expertise in designing and building efficient, user-centric digital solutions. Check it out to see how I can contribute to your team!</p>
                     <div class="flex items-center">
                         <!-- Youtube -->
-                        <a href="https://www.youtube.com/@NugrohoAW" target="_blank" class="w-9 h-9 mr-3 text-youngcyan rounded-full flex justify-center items-center border border-youngcyan hover:bg-darkblue hover:border-red hover:text-red">
+                        <a href="https://www.youtube.com/@NugrohoAW" target="_blank" class="w-9 h-9 mr-3 text-youngcyan rounded-full flex justify-center items-center border border-youngcyan hover:bg-darkblue hover:border-primary hover:text-primary">
                             <svg role="img" width="20" class="fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <title>YouTube</title>
                                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 
@@ -137,7 +139,7 @@
                             </svg>
                         </a>
                         <!-- Instagram -->
-                        <a href="https://www.instagram.com/nugrohoaw_" target="_blank" class="w-9 h-9 mr-3 text-youngcyan rounded-full flex justify-center items-center border border-youngcyan hover:bg-darkblue hover:border-red hover:text-red">
+                        <a href="https://www.instagram.com/nugrohoaw_" target="_blank" class="w-9 h-9 mr-3 text-youngcyan rounded-full flex justify-center items-center border border-youngcyan hover:bg-darkblue hover:border-primary hover:text-primary">
                             <svg role="img" width="20" class="fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <title>Instagram</title>
                                 <path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 
@@ -167,7 +169,7 @@
                             </svg>
                         </a>
                         <!-- Twitter -->
-                        <a href="https://x.com/NugrohoAgungWi1" target="_blank" class="w-9 h-9 mr-3 text-youngcyan rounded-full flex justify-center items-center border border-youngcyan hover:bg-darkblue hover:border-red hover:text-red">
+                        <a href="https://x.com/NugrohoAgungWi1" target="_blank" class="w-9 h-9 mr-3 text-youngcyan rounded-full flex justify-center items-center border border-youngcyan hover:bg-darkblue hover:border-primary hover:text-primary">
                             <svg role="img" width="20" class="fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <title>X</title>
                                 <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 
@@ -175,7 +177,7 @@
                             </svg>
                         </a>
                         <!-- Git Hub -->
-                        <a href="https://github.com/ANugroho186" target="_blank" class="w-9 h-9 mr-3 text-youngcyan rounded-full flex justify-center items-center border border-youngcyan hover:bg-darkblue hover:border-red hover:text-red">
+                        <a href="https://github.com/ANugroho186" target="_blank" class="w-9 h-9 mr-3 text-youngcyan rounded-full flex justify-center items-center border border-youngcyan hover:bg-darkblue hover:border-primary hover:text-primary">
                             <svg role="img" width="20" class="fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <title>GitHub</title>
                                 <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 
@@ -189,7 +191,7 @@
                             </svg>
                         </a>
                         <!-- Linkedin -->
-                        <a href="https://www.linkedin.com/in/nugroho-agung-wibisono-48aa1b2b4/" target="_blank" class="w-9 h-9 mr-3 text-youngcyan rounded-full flex justify-center items-center border border-youngcyan hover:bg-darkblue hover:border-red hover:text-red">
+                        <a href="https://www.linkedin.com/in/nugroho-agung-wibisono-48aa1b2b4/" target="_blank" class="w-9 h-9 mr-3 text-youngcyan rounded-full flex justify-center items-center border border-youngcyan hover:bg-darkblue hover:border-primary hover:text-primary">
                             <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" class="fill-current" viewBox="0 0 50 50">
                                 <path d="M41,4H9C6.24,4,4,6.24,4,9v32c0,2.76,2.24,5,5,5h32c2.76,0,5-2.24,5-5V9C46,6.24,43.76,4,41,4z 
                                 M17,20v19h-6V20H17z M11,14.47c0-1.4,1.2-2.47,3-2.47s2.93,1.07,3,2.47c0,1.4-1.12,2.53-3,2.53C12.2,
@@ -198,10 +200,10 @@
                             </svg>
                         </a>
                         <div class="flex items-center">
-                            <a href="https://drive.usercontent.google.com/uc?id=1YsT067YUB14m31hoKsWzcWFrAfmzy9t3&export=download" class="text-base font-semibold block lg:hidden text-youngcyan bg-transparent py-2 px-8 rounded-full items-center border border-youngcyan hover:bg-darkblue hover:border-red hover:text-red" style="font-family: JetBrains Mono, serif;">
+                            <a href="https://drive.usercontent.google.com/uc?id=1YsT067YUB14m31hoKsWzcWFrAfmzy9t3&export=download" class="text-base font-semibold block lg:hidden text-youngcyan bg-transparent py-2 px-8 rounded-full items-center border border-youngcyan hover:bg-darkblue hover:border-primary hover:text-primary" style="font-family: JetBrains Mono, serif;">
                                 CV
                             </a>
-                            <a href="https://drive.usercontent.google.com/uc?id=1YsT067YUB14m31hoKsWzcWFrAfmzy9t3&export=download" class="text-base font-semibold hidden lg:block text-youngcyan bg-transparent py-2 px-8 rounded-full items-center border border-youngcyan hover:bg-darkblue hover:border-red hover:text-red" style="font-family: JetBrains Mono, serif;">
+                            <a href="https://drive.usercontent.google.com/uc?id=1YsT067YUB14m31hoKsWzcWFrAfmzy9t3&export=download" class="text-base font-semibold hidden lg:block text-youngcyan bg-transparent py-2 px-8 rounded-full items-center border border-youngcyan hover:bg-darkblue hover:border-primary hover:text-primary" style="font-family: JetBrains Mono, serif;">
                                 Download CV
                             </a>
                         </div>
@@ -219,52 +221,52 @@
         <div class="container">
             <div class="w-full px-4">
                 <div class="max-w-xl mx-auto text-center mb-16">
-                    <h4 class="font-semibold text-lg text-youngred mb-2" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">Portfolio</span>]</h4>
+                    <h4 class="font-semibold text-lg text-primary cp-glitch mb-2" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">Portfolio</span>]</h4>
                     <h2 class="font-bold text-youngcyan text-3xl mb-4 sm:text-4xl lg:text-5xl">Latest Projects</h2>
                     <p class="font-medium text-md text-white md:text-lg">Here are some of the academic projects I have worked on collaboratively with my team during my studies.</p>
                 </div>
             </div>
             <div class="w-full px-4 flex flex-wrap justify-center">
                 <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                    <div class="group relative rounded-lg items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-youngcyan">
+                    <div class="group relative cp-card items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-youngcyan">
                         <div class="h-96 w-120">
-                          <img class="object-cover rounded-lg h-full w-full transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125 group-hover:rounded-lg:" src="src/img/RPL1.png" alt="" />
+                          <img class="object-cover h-full w-full transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125 group-hover:rounded-lg:" src="src/img/RPL1.png" alt="" />
                         </div>
-                        <div class="absolute rounded-lg inset-0 bg-gradient-to-b from-transparent via-transparent to-red group-hover:from-red group-hover:via-black/60 group-hover:to-black/70"></div>
-                        <div class="absolute rounded-lg inset-0 flex translate-y-[53%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-red group-hover:from-red group-hover:via-black/60 group-hover:to-black/70"></div>
+                        <div class="absolute inset-0 flex translate-y-[53%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
                           <h1 class="text-xl font-bold text-white mb-4" style="font-family: JetBrains Mono, serif;">System Analysis for Cutting Services Website</h1>
                           <p class="mb-3 text-sm italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">Conducted system analysis using observation methods, modeled the existing system with UML, and developed a recommendation system based on functional and non-functional analysis.</p>
                           <!-- <button class="rounded-full bg-neutral-900 py-2 px-3.5 font-com text-sm capitalize text-white shadow shadow-black/60">See More</button> -->
                         </div>
                     </div>
-                    <div class="group relative rounded-lg items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-youngcyan">
+                    <div class="group relative cp-card items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-youngcyan">
                         <div class="h-96 w-120">
-                          <img class="object-cover rounded-lg h-full w-full transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src="src/img/HCI1.png" alt="" />
+                          <img class="object-cover h-full w-full transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src="src/img/HCI1.png" alt="" />
                         </div>
-                        <div class="absolute rounded-lg inset-0 bg-gradient-to-b from-transparent via-transparent to-red group-hover:from-red group-hover:via-black/60 group-hover:to-black/70"></div>
-                        <div class="absolute rounded-lg inset-0 flex translate-y-[55%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-red group-hover:from-red group-hover:via-black/60 group-hover:to-black/70"></div>
+                        <div class="absolute inset-0 flex translate-y-[55%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
                           <h1 class="text-xl font-bold text-white mb-4" style="font-family: JetBrains Mono, serif;">Conceptual Design for Employee Attendance App</h1>
                           <p class="mb-3 text-sm italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">Designed a conceptual Android attendance app using Hierarchical Task Analysis (HTA), created low-fidelity and high-fidelity prototypes using Figma, and applied the PACT (Person, Activity, Context, Technology) framework.</p>
                           <!-- <button class="rounded-full bg-neutral-900 py-2 px-3.5 font-com text-sm capitalize text-white shadow shadow-black/60">See More</button> -->
                         </div>
                     </div>
-                    <div class="group relative rounded-lg items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-youngcyan">
+                    <div class="group relative cp-card items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-youngcyan">
                         <div class="h-96 w-120">
-                          <img class="object-cover rounded-lg h-full w-full transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src="src/img/ABO1.png" alt="" />
+                          <img class="object-cover h-full w-full transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src="src/img/ABO1.png" alt="" />
                         </div>
-                        <div class="absolute rounded-lg inset-0 bg-gradient-to-b from-transparent via-transparent to-red group-hover:from-red group-hover:via-black/60 group-hover:to-black/70"></div>
-                        <div class="absolute rounded-lg inset-0 flex translate-y-[53%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-red group-hover:from-red group-hover:via-black/60 group-hover:to-black/70"></div>
+                        <div class="absolute inset-0 flex translate-y-[53%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
                           <h1 class="text-xl font-bold text-white mb-4" style="font-family: JetBrains Mono, serif;">Web Development with Object-Oriented Analysis</h1>
                           <p class="mb-3 text-sm italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">Performed literature-based system analysis, developed UML models (use case, activity, and sequence diagrams), and designed a high-fidelity prototype for a website using Figma.</p>
                           <!-- <button class="rounded-full bg-neutral-900 py-2 px-3.5 font-com text-sm capitalize text-white shadow shadow-black/60">See More</button> -->
                         </div>
                     </div>
-                    <div class="group relative rounded-lg cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-youngcyan">
+                    <div class="group relative cp-card cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-youngcyan">
                         <div class="h-96 w-120">
-                          <img class="object-cover rounded-lg h-full w-full transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src="src/img/NLP1.png" alt="" />
+                          <img class="object-cover h-full w-full transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src="src/img/NLP1.png" alt="" />
                         </div>
-                        <div class="absolute rounded-lg inset-0 bg-gradient-to-b from-transparent via-transparent to-red group-hover:from-red group-hover:via-black/60 group-hover:to-black/70"></div>
-                        <div class="absolute rounded-lg inset-0 flex translate-y-[53%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-red group-hover:from-red group-hover:via-black/60 group-hover:to-black/70"></div>
+                        <div class="absolute inset-0 flex translate-y-[53%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
                           <h1 class="text-xl font-bold text-white mb-4" style="font-family: JetBrains Mono, serif;">Research: Sentiment Analysis on Palestinian Genocide Denial</h1>
                           <p class="mb-3 text-sm italic text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">Conducted manual dataset labeling, built a custom stopword dictionary for data preprocessing, developed training and testing scripts for deep learning models, and wrote sections of the research paper based on findings.</p>
                           <!-- <button class="rounded-full bg-neutral-900 py-2 px-3.5 font-com text-sm capitalize text-white shadow shadow-black/60">See More</button> -->
@@ -328,7 +330,7 @@
         <div class="container-card">
             <div class="text-center mb-12 w-full px-4">
                 <div class="max-w-xl mx-auto text-center mb-16">
-                    <h4 class="font-semibold text-lg text-youngred mb-2" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">Blog</span>]</h4>
+                    <h4 class="font-semibold text-lg text-primary cp-glitch mb-2" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">Blog</span>]</h4>
                     <h2 class="font-bold text-youngcyan text-3xl mb-4 sm:text-4xl lg:text-5xl">Latest Posts</h2>
                     <p class="font-medium text-md text-white md:text-lg">Welcome to my personal blog, where I share my journey, insights, and experiences in programming, technology, and daily life.</p>
                 </div>
@@ -378,14 +380,14 @@
         <div class="container">
             <div class="w-full px-4">
                 <div class="max-w-xl mx-auto text-center mb-16">
-                    <h4 class="font-semibold text-lg text-youngred mb-2" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">Contact</span>]</h4>
+                    <h4 class="font-semibold text-lg text-primary cp-glitch mb-2" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">Contact</span>]</h4>
                     <h2 class="font-bold text-youngcyan text-3xl mb-4 sm:text-4xl lg:text-5xl">Have a Question?</h2>
                     <p class="font-medium text-md text-white md:text-lg">Have questions, suggestions, or need assistance? Feel free to reach out to us. Our team is ready to help you!</p>
                 </div>
                 <div class="max-w-xl mx-auto text-center mb-16">
                     <a href="mailto:nugroho.a.wibisono@gmail.com" target="_blank" class="text-base font-semibold
-                     text-darkblack bg-youngcyan py-3 px-8 rounded-3xl hover:scale-110 hover:shadow-lg 
-                     hover:bg-red hover:text-white transition duration-300 ease-in-out" style="font-family: 
+                     text-darkblack bg-youngcyan py-3 px-8 cp-btn hover:scale-110 hover:shadow-lg 
+                     hover:bg-primary hover:text-white transition duration-300 ease-in-out" style="font-family: 
                      JetBrains Mono, serif;">
                      Send Message -></a>
                 </div>
@@ -410,13 +412,13 @@
                     <h3 class="font-semibold text-xl text-youngcyan mb-5">Latest Posts</h3>
                     <ul class=" text-white">
                         <li>
-                            <a href="#blog" class="inline-block text-base hover:text-primary mb-3">Programming</a>
+                            <a href="#blog" class="inline-block text-base hover:text-primary cp-glitch mb-3">Programming</a>
                         </li>
                         <li>
-                            <a href="#blog" class="inline-block text-base hover:text-primary mb-3">Technology</a>
+                            <a href="#blog" class="inline-block text-base hover:text-primary cp-glitch mb-3">Technology</a>
                         </li>
                         <li>
-                            <a href="#blog" class="inline-block text-base hover:text-primary mb-3">Hobby</a>
+                            <a href="#blog" class="inline-block text-base hover:text-primary cp-glitch mb-3">Hobby</a>
                         </li>
                     </ul>
                 </div>
@@ -424,22 +426,22 @@
                     <h3 class="font-semibold text-xl text-youngcyan mb-5">Links</h3>
                     <ul class=" text-slate-300">
                         <li>
-                            <a href="#home" class="inline-block text-base hover:text-primary mb-3">Home</a>
+                            <a href="#home" class="inline-block text-base hover:text-primary cp-glitch mb-3">Home</a>
                         </li>
                         <li>
-                            <a href="#about" class="inline-block text-base hover:text-primary mb-3">About</a>
+                            <a href="#about" class="inline-block text-base hover:text-primary cp-glitch mb-3">About</a>
                         </li>
                         <li>
-                            <a href="#portfolio" class="inline-block text-base hover:text-primary mb-3">Portfolio</a>
+                            <a href="#portfolio" class="inline-block text-base hover:text-primary cp-glitch mb-3">Portfolio</a>
                         </li>
                         <!-- <li>
-                            <a href="#clients" class="inline-block text-base hover:text-primary mb-3">Clients</a>
+                            <a href="#clients" class="inline-block text-base hover:text-primary cp-glitch mb-3">Clients</a>
                         </li> -->
                         <li>
-                            <a href="#blog" class="inline-block text-base hover:text-primary mb-3">Blog</a>
+                            <a href="#blog" class="inline-block text-base hover:text-primary cp-glitch mb-3">Blog</a>
                         </li>
                         <li>
-                            <a href="#contact" class="inline-block text-base hover:text-primary mb-3">Contact</a>
+                            <a href="#contact" class="inline-block text-base hover:text-primary cp-glitch mb-3">Contact</a>
                         </li>
                     </ul>
                 </div>
