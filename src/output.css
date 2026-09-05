@@ -866,6 +866,11 @@ video {
   background-color: rgb(36 26 68 / var(--tw-bg-opacity, 1));
 }
 
+.bg-darkred {
+  --tw-bg-opacity: 1;
+  background-color: rgb(111 7 33 / var(--tw-bg-opacity, 1));
+}
+
 .bg-neutral-900 {
   --tw-bg-opacity: 1;
   background-color: rgb(23 23 23 / var(--tw-bg-opacity, 1));
@@ -1152,6 +1157,10 @@ video {
 .shadow-youngcyan {
   --tw-shadow-color: #06cfce;
   --tw-shadow: var(--tw-shadow-colored);
+}
+
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 .transition {

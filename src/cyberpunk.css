@@ -145,41 +145,6 @@ body::before {
   100% { transform: translate(0, 0)   skewX(0deg); }
 }
 
-/* ===== 5. BINGKAI HUD (kurung sudut ala target-lock) ===== */
-.cp-hud { position: relative; }
-
-.cp-hud::before,
-.cp-hud::after {
-  content: '';
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  border: 2px solid var(--cp-yellow);
-  pointer-events: none;
-  transition: width .28s ease, height .28s ease, border-color .28s ease;
-}
-
-.cp-hud::before {
-  top: -8px;
-  left: -8px;
-  border-right: 0;
-  border-bottom: 0;
-}
-
-.cp-hud::after {
-  bottom: -8px;
-  right: -8px;
-  border-left: 0;
-  border-top: 0;
-}
-
-.cp-hud:hover::before,
-.cp-hud:hover::after {
-  width: 30px;
-  height: 30px;
-  border-color: var(--cp-cyan);
-}
-
 /* ===== 6. KARTU CYBER: sudut terpotong + sapuan scanline saat hover ===== */
 .cp-card {
   position: relative;
@@ -456,4 +421,278 @@ html.cp-reveal-on .cp-reveal-slice.cp-in {
 @media (prefers-reduced-motion: reduce) {
   .cp-face__ghost,
   .cp-face__noise { display: none !important; }
+}
+
+/* ===== 18. SECTION SERTIFIKAT ===== */
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 1.5rem;
+}
+
+.cert-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: rgba(11, 16, 26, .55);
+  border: 1px solid rgba(6, 207, 206, .25);
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
+}
+
+.cert-card:hover,
+.cert-card:focus-visible {
+  border-color: var(--cp-yellow);
+  box-shadow: 0 0 22px rgba(252, 238, 10, .22);
+  transform: translateY(-4px);
+  outline: none;
+}
+
+/* Isi kartu memakai <span> karena pembungkusnya <button> (tidak boleh berisi
+   elemen blok). Karena itu semuanya perlu dijadikan block secara manual,
+   kalau tidak judul, penerbit, dan tanggal akan berdempet dalam satu baris. */
+.cert-card__shot,
+.cert-card__body,
+.cert-card__title,
+.cert-card__org,
+.cert-card__date {
+  display: block;
+}
+
+.cert-card__shot {
+  position: relative;
+  overflow: hidden;
+  background: #05070c;
+  aspect-ratio: 4 / 3;
+}
+
+.cert-card__shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform .4s ease, filter .3s ease;
+}
+
+.cert-card:hover .cert-card__shot img { transform: scale(1.06); filter: saturate(1.15); }
+
+/* garis scanline muncul saat hover */
+.cert-card__shot::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(0,240,255,.12) 0 2px, transparent 2px 5px);
+  transition: opacity .3s ease;
+}
+.cert-card:hover .cert-card__shot::after { opacity: 1; }
+
+/* label kategori */
+.cert-card__tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  font-size: .68rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  background: rgba(11, 16, 26, .88);
+  border-left: 2px solid var(--cp-yellow);
+  color: var(--cp-yellow);
+}
+
+.cert-card__body { padding: 1rem 1.1rem 1.2rem; }
+
+.cert-card__title {
+  color: var(--cp-cyan);
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: .35rem;
+}
+
+.cert-card__org { color: #ececed; font-size: .9rem; }
+
+.cert-card__date {
+  color: rgba(236, 236, 237, .6);
+  font-size: .8rem;
+  margin-top: .5rem;
+  letter-spacing: .04em;
+}
+
+/* petunjuk klik */
+.cert-card__zoom {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  font-size: .7rem;
+  color: var(--cp-yellow);
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.cert-card:hover .cert-card__zoom { opacity: 1; }
+
+/* ---- jendela perbesar (lightbox) ---- */
+.cert-box {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 3vh 3vw;
+  background: rgba(5, 7, 12, .93);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+
+.cert-box.is-open { display: flex; }
+
+.cert-box__inner {
+  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+}
+
+.cert-box__img {
+  max-width: 100%;
+  max-height: 78vh;
+  object-fit: contain;
+  border: 1px solid rgba(252, 238, 10, .45);
+}
+
+.cert-box__cap {
+  color: #ececed;
+  text-align: center;
+  font-size: .92rem;
+}
+.cert-box__cap b { color: var(--cp-cyan); }
+
+.cert-box__close {
+  position: absolute;
+  top: -2.4rem;
+  right: 0;
+  background: none;
+  border: 1px solid var(--cp-yellow);
+  color: var(--cp-yellow);
+  width: 34px;
+  height: 34px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease;
+}
+.cert-box__close:hover { background: var(--cp-yellow); color: var(--cp-black); }
+
+@media (max-width: 480px) {
+  .cert-box__img { max-height: 68vh; }
+  .cert-box__close { top: -2.2rem; }
+}
+
+/* ===== 19. SIKU HUD PADA KARTU SERTIFIKAT =====
+   Siku TIDAK bisa dipasang langsung di .cert-card, karena kartu itu memakai
+   clip-path yang akan memotong habis apa pun di luar batasnya. Karena itu
+   dipakai pembungkus .cert-item yang tidak ter-clip.
+   Bentuknya mengikuti favicon: siku kiri-atas dan kanan-bawah. */
+.cert-item { position: relative; }
+
+.cert-item::before,
+.cert-item::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--cp-yellow);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .25s ease, width .25s ease, height .25s ease;
+}
+
+.cert-item::before {
+  top: -7px;
+  left: -7px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.cert-item::after {
+  bottom: -7px;
+  right: -7px;
+  border-left: 0;
+  border-top: 0;
+}
+
+.cert-item:hover::before,
+.cert-item:hover::after,
+.cert-item:focus-within::before,
+.cert-item:focus-within::after {
+  opacity: 1;
+  width: 26px;
+  height: 26px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cert-item::before,
+  .cert-item::after { transition: none; }
+}
+
+/* ===== 20. WADAH HOLOGRAM 3D ===== */
+.holo-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-height: 460px;
+  margin-inline: auto;
+  overflow: hidden;
+}
+
+.holo-wrap canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* pendar lembut di belakang hologram */
+.holo-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 55% 45% at 50% 58%, rgba(6, 207, 206, .13), transparent 72%);
+}
+
+/* garis scanline tipis di atas hologram */
+.holo-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(0, 240, 255, .07) 0 1px, transparent 1px 4px);
+}
+
+.holo-label {
+  position: absolute;
+  left: 0;
+  bottom: 4px;
+  z-index: 3;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem;
+  letter-spacing: .08em;
+  color: rgba(252, 238, 10, .75);
+  pointer-events: none;
+}
+
+@media (max-width: 1023px) {
+  .holo-wrap { max-width: 340px; margin-top: 2.5rem; }
 }
