@@ -1,0 +1,365 @@
+/* ============================================================
+   CYBERPUNK / PHANTOM LIBERTY EFFECT LIBRARY
+   Palet: kuning #FCEE0A | crimson #E5093F | pink #FF2E63
+          cyan #00F0FF | hitam #0B0B10
+   ============================================================ */
+
+:root {
+  --cp-yellow: #FCEE0A;
+  --cp-red: #E5093F;
+  --cp-pink: #FF2E63;
+  --cp-cyan: #00F0FF;
+  --cp-black: #0B0B10;
+}
+
+/* ===== 1. OVERLAY GLOBAL: scanline CRT + sapuan scan ===== */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.10) 0 1px,
+    transparent 1px 4px
+  );
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 140px;
+  z-index: 9991;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0, 240, 255, 0.045),
+    transparent
+  );
+  animation: cp-scan-sweep 8s linear infinite;
+}
+
+@keyframes cp-scan-sweep {
+  from { transform: translateY(-160px); }
+  to   { transform: translateY(100vh); }
+}
+
+/* ===== 2. SELEKSI TEKS & SCROLLBAR ===== */
+::selection {
+  background: var(--cp-yellow);
+  color: var(--cp-black);
+  text-shadow: none;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: rgba(11, 16, 26, .85); }
+::-webkit-scrollbar-thumb {
+  background: rgba(252, 238, 10, .55);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--cp-cyan); background-clip: content-box; }
+::-webkit-scrollbar-corner { background: rgba(11, 16, 26, .85); }
+
+/* ===== 3. GLITCH TEKS (aman untuk elemen ber-span) ===== */
+.cp-glitch { transition: color .15s ease; }
+
+.cp-glitch:hover {
+  animation: cp-glitch-shift .32s steps(2) infinite;
+}
+
+@keyframes cp-glitch-shift {
+  0%   { text-shadow: 2px 0 var(--cp-cyan), -2px 0 var(--cp-pink); transform: translate(0, 0); }
+  33%  { text-shadow: -3px 0 var(--cp-cyan), 3px 0 var(--cp-pink); transform: translate(1px, -1px); }
+  66%  { text-shadow: 2px 0 var(--cp-pink), -2px 0 var(--cp-cyan); transform: translate(-1px, 1px); }
+  100% { text-shadow: 2px 0 var(--cp-cyan), -2px 0 var(--cp-pink); transform: translate(0, 0); }
+}
+
+/* Glitch kuat dengan lapisan sobek - butuh atribut data-text */
+.cp-glitch-hard { position: relative; display: inline-block; }
+
+.cp-glitch-hard::before,
+.cp-glitch-hard::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .1s;
+}
+
+.cp-glitch-hard:hover::before {
+  opacity: .85;
+  color: var(--cp-cyan);
+  clip-path: inset(12% 0 58% 0);
+  animation: cp-tear-a .4s steps(2) infinite;
+}
+
+.cp-glitch-hard:hover::after {
+  opacity: .85;
+  color: var(--cp-pink);
+  clip-path: inset(62% 0 12% 0);
+  animation: cp-tear-b .4s steps(2) infinite;
+}
+
+@keyframes cp-tear-a {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(-5px); }
+}
+@keyframes cp-tear-b {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(5px); }
+}
+
+/* ===== 4. TOMBOL CYBER: sudut terpotong + glitch saat hover ===== */
+.cp-btn {
+  position: relative;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 14px) 0,
+    100% 14px,
+    100% 100%,
+    14px 100%,
+    0 calc(100% - 14px)
+  );
+  transition: background-color .18s ease, color .18s ease, box-shadow .18s ease;
+}
+
+.cp-btn:hover {
+  animation: cp-btn-jitter .28s steps(2) 3;
+  box-shadow: 0 0 0 1px var(--cp-yellow), 0 0 22px rgba(252, 238, 10, .45);
+}
+
+@keyframes cp-btn-jitter {
+  0%   { transform: translate(0, 0)   skewX(0deg); }
+  25%  { transform: translate(-2px, 1px) skewX(-1.5deg); }
+  50%  { transform: translate(2px, -1px) skewX(1.5deg); }
+  75%  { transform: translate(-1px, -1px) skewX(-.8deg); }
+  100% { transform: translate(0, 0)   skewX(0deg); }
+}
+
+/* ===== 5. BINGKAI HUD (kurung sudut ala target-lock) ===== */
+.cp-hud { position: relative; }
+
+.cp-hud::before,
+.cp-hud::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--cp-yellow);
+  pointer-events: none;
+  transition: width .28s ease, height .28s ease, border-color .28s ease;
+}
+
+.cp-hud::before {
+  top: -8px;
+  left: -8px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.cp-hud::after {
+  bottom: -8px;
+  right: -8px;
+  border-left: 0;
+  border-top: 0;
+}
+
+.cp-hud:hover::before,
+.cp-hud:hover::after {
+  width: 30px;
+  height: 30px;
+  border-color: var(--cp-cyan);
+}
+
+/* ===== 6. KARTU CYBER: sudut terpotong + sapuan scanline saat hover ===== */
+.cp-card {
+  position: relative;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 20px) 0,
+    100% 20px,
+    100% 100%,
+    20px 100%,
+    0 calc(100% - 20px)
+  );
+  transition: box-shadow .3s ease;
+}
+
+.cp-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 240, 255, .10) 0 2px,
+    transparent 2px 5px
+  );
+  transition: opacity .3s ease;
+  z-index: 2;
+}
+
+.cp-card:hover::after { opacity: 1; }
+
+.cp-card:hover {
+  box-shadow: 0 0 0 1px var(--cp-yellow), 0 0 28px rgba(229, 9, 63, .35);
+}
+
+/* ===== 7. LINK NAVIGASI: garis sapuan + glitch ===== */
+.cp-nav { position: relative; }
+
+.cp-nav::after {
+  content: '';
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  bottom: 2px;
+  height: 2px;
+  background: var(--cp-yellow);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .25s ease;
+}
+
+.cp-nav:hover::after { transform: scaleX(1); }
+
+/* ===== 8. BATANG GLITCH DEKORATIF (hero) ===== */
+.cp-bars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: .5;
+  background-image:
+    linear-gradient(to right, var(--cp-red) 0 2px, transparent 2px),
+    linear-gradient(to right, var(--cp-pink) 0 1px, transparent 1px),
+    linear-gradient(to right, var(--cp-cyan) 0 1px, transparent 1px);
+  background-size: 190px 42%, 320px 28%, 260px 18%;
+  background-position: 12% 8%, 62% 46%, 34% 74%;
+  background-repeat: no-repeat;
+  animation: cp-bars-flicker 5s steps(3) infinite;
+}
+
+@keyframes cp-bars-flicker {
+  0%, 100% { opacity: .45; transform: translateX(0); }
+  42%      { opacity: .18; transform: translateX(-4px); }
+  44%      { opacity: .6;  transform: translateX(3px); }
+  70%      { opacity: .3;  transform: translateX(0); }
+}
+
+/* ===== 9. KEDIP HALUS untuk aksen kecil ===== */
+.cp-flicker { animation: cp-flicker 4.5s steps(2) infinite; }
+
+@keyframes cp-flicker {
+  0%, 100% { opacity: 1; }
+  47%      { opacity: 1; }
+  48%      { opacity: .35; }
+  49%      { opacity: 1; }
+  86%      { opacity: 1; }
+  87%      { opacity: .5; }
+  88%      { opacity: 1; }
+}
+
+/* ===== 10. HORMATI PREFERENSI KURANGI ANIMASI ===== */
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  .cp-bars,
+  .cp-flicker { animation: none; }
+
+  .cp-glitch:hover,
+  .cp-btn:hover { animation: none; }
+
+  .cp-glitch-hard:hover::before,
+  .cp-glitch-hard:hover::after { animation: none; opacity: 0; }
+}
+
+
+/* ===== 11. BINGKAI HUD 4 SUDUT (viewport ala HUD) ===== */
+.cp-hud4 { position: relative; }
+
+.cp-hud4::before {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--cp-yellow), var(--cp-yellow)) left top / 22px 2px no-repeat,
+    linear-gradient(var(--cp-yellow), var(--cp-yellow)) left top / 2px 22px no-repeat,
+    linear-gradient(var(--cp-yellow), var(--cp-yellow)) right top / 22px 2px no-repeat,
+    linear-gradient(var(--cp-yellow), var(--cp-yellow)) right top / 2px 22px no-repeat,
+    linear-gradient(var(--cp-cyan), var(--cp-cyan)) left bottom / 22px 2px no-repeat,
+    linear-gradient(var(--cp-cyan), var(--cp-cyan)) left bottom / 2px 22px no-repeat,
+    linear-gradient(var(--cp-cyan), var(--cp-cyan)) right bottom / 22px 2px no-repeat,
+    linear-gradient(var(--cp-cyan), var(--cp-cyan)) right bottom / 2px 22px no-repeat;
+  transition: inset .3s ease;
+}
+
+.cp-hud4:hover::before { inset: -18px; }
+
+/* ===== 12. LAPISAN BATANG GLITCH DI HERO ===== */
+#home { position: relative; }
+#home > .container { position: relative; z-index: 1; }
+.cp-bars { z-index: 0; }
+
+
+/* ===== 13. KARTU BLOG: sudut angular tanpa mengganggu animasi overflow =====
+   Catatan: clip-path TIDAK boleh dipasang di .card__article, karena kartu ini
+   mengandalkan overflow:initial saat hover agar .card__data bisa keluar batas. */
+.card__img {
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+  border-radius: 0 !important;
+  transition: filter .3s ease;
+}
+
+.card__article:hover .card__img { filter: saturate(1.25) contrast(1.1); }
+
+.card__data {
+  clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+  border-radius: 0 !important;
+  border-top: 2px solid var(--cp-yellow);
+}
+
+.card__button {
+  color: var(--cp-yellow) !important;
+  transition: color .2s ease;
+}
+
+.card__button:hover {
+  color: var(--cp-cyan) !important;
+  animation: cp-glitch-shift .32s steps(2) infinite;
+}
+
+
+/* ===== 14. PERBAIKAN SUDUT KARTU BLOG =====
+   Sudut melengkung yang terlihat saat diam BUKAN dari gambar, tapi dari
+   .card__article yang punya border-radius 1.5rem + overflow:hidden sehingga
+   ikut memotong gambar di dalamnya. Begitu hover, animasi mengubah overflow
+   jadi initial -> kliping hilang -> sudut mendadak berubah jadi lancip.
+   Menolkan radius-nya membuat bentuknya konsisten di kedua keadaan. */
+.card__article {
+  border-radius: 0 !important;
+}
+
+/* ===== 15. CEGAH SCROLLBAR HORIZONTAL =====
+   Elemen dekoratif (batang glitch, bingkai HUD, grid perspektif) memakai
+   posisi absolut dan inset negatif. Kalau salah satunya melewati tepi layar
+   di ukuran tertentu, browser memunculkan scrollbar horizontal. */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+.cp-bars,
+.cp-hud4::before {
+  max-width: 100vw;
+}

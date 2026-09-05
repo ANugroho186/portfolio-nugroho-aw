@@ -237,7 +237,7 @@ img-card {
   background:
     radial-gradient(ellipse 60% 38% at 50% 40%, rgba(6, 207, 206, 0.14), transparent 72%),
     radial-gradient(ellipse 75% 10% at 50% 80%, rgba(6, 207, 206, 0.26), transparent 75%),
-    radial-gradient(ellipse 35% 25% at 50% 30%, rgba(207, 0, 51, 0.10), transparent 70%);
+    radial-gradient(ellipse 35% 25% at 50% 30%, rgba(255, 107, 26, 0.12), transparent 70%);
   pointer-events: none;
 }
 
