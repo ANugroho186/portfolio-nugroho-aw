@@ -32,6 +32,7 @@ hamburger.addEventListener('click', function () {
 
     if (!('IntersectionObserver' in window) || kurangiGerak || !els.length) {
         root.classList.remove('cp-reveal-on');
+        window.cpRevealAmati = function () {};   // versi kosong, aman dipanggil
         return;
     }
 
@@ -54,6 +55,16 @@ hamburger.addEventListener('click', function () {
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
     els.forEach(function (el) { pengamat.observe(el); });
+
+    // Elemen yang dibuat JavaScript SETELAH ini (misalnya kartu sertifikat)
+    // tidak ikut terdaftar di atas. Fungsi ini dipakai untuk mendaftarkannya,
+    // kalau tidak, elemen itu akan tersembunyi permanen di opacity 0.
+    window.cpRevealAmati = function (baru) {
+        Array.prototype.forEach.call(baru, function (el, i) {
+            if (i > 0) el.style.transitionDelay = (i * 90) + 'ms';
+            pengamat.observe(el);
+        });
+    };
 
     // Jaring pengaman: kalau setelah 4 detik masih ada elemen yang sudah
     // berada di dalam layar tapi belum muncul, tampilkan paksa.
@@ -151,4 +162,163 @@ hamburger.addEventListener('click', function () {
     (function jadwalkan() {
         setTimeout(function () { mulai(); jadwalkan(); }, JEDA + acak(-600, 600));
     })();
+})();
+
+// ============================================================
+// SECTION SERTIFIKAT
+//
+// >>> CARA MENAMBAH SERTIFIKAT BARU <<<
+// 1. Simpan gambarnya dua ukuran:
+//      src/img/cert/thumb/<nama-file>.jpg   (lebar 600 px, untuk kartu)
+//      src/img/cert/full/<nama-file>.jpg    (lebar 1500 px, untuk perbesar)
+// 2. Salin satu blok { ... } di bawah, letakkan di mana saja dalam daftar.
+//    Urutannya diatur otomatis dari tanggal terbaru, jadi tidak perlu
+//    dipindah-pindah sendiri.
+// 3. Simpan file ini. Selesai - tidak perlu menyentuh index.html.
+//
+// Keterangan kolom:
+//    berkas   : nama file tanpa .jpg (harus sama di folder thumb dan full)
+//    judul    : nama sertifikatnya
+//    penerbit : lembaga yang mengeluarkan
+//    tanggal  : format YYYY-MM-DD (dipakai untuk mengurutkan)
+//    kategori : bebas, misalnya Akademik / Profesi / Kursus
+// ============================================================
+var DAFTAR_SERTIFIKAT = [
+    {
+        berkas: 'hackerrank-swe-2026',
+        judul: 'Software Engineer',
+        penerbit: 'HackerRank',
+        tanggal: '2026-07-01',
+        kategori: 'Profesi'
+    },
+    {
+        berkas: 'bnsp-swe-2026',
+        judul: 'Sertifikat Kompetensi - Perekayasa Perangkat Lunak',
+        penerbit: 'BNSP - LSP Universitas Mercu Buana',
+        tanggal: '2026-01-07',
+        kategori: 'Profesi'
+    },
+    {
+        berkas: 'udemy-feature-eng-2025',
+        judul: 'Feature Engineering For Machine Learning 101',
+        penerbit: 'Udemy',
+        tanggal: '2025-11-22',
+        kategori: 'Kursus'
+    },
+    {
+        berkas: 'phkm-inotech-2025',
+        judul: 'Peserta PHKM - INOTECH 40',
+        penerbit: 'Fakultas Ilmu Komputer, Universitas Mercu Buana',
+        tanggal: '2025-07-18',
+        kategori: 'Akademik'
+    },
+    {
+        berkas: 'pkm-umb-2025',
+        judul: 'Lolos Seleksi Internal PKM 2025',
+        penerbit: 'Universitas Mercu Buana',
+        tanggal: '2025-02-26',
+        kategori: 'Akademik'
+    },
+    {
+        berkas: 'hackerrank-react-2024',
+        judul: 'Frontend Developer (React)',
+        penerbit: 'HackerRank',
+        tanggal: '2024-10-19',
+        kategori: 'Profesi'
+    },
+    {
+        berkas: 'cisco-ccna-2023',
+        judul: 'CCNAv7: Introduction to Networks',
+        penerbit: 'Cisco Networking Academy',
+        tanggal: '2023-07-10',
+        kategori: 'Kursus'
+    }
+];
+
+(function () {
+    var wadah = document.querySelector('#cert-grid');
+    if (!wadah) return;
+
+    var BULAN = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+    function tanggalTampil(iso) {
+        var p = iso.split('-');
+        return parseInt(p[2], 10) + ' ' + BULAN[parseInt(p[1], 10) - 1] + ' ' + p[0];
+    }
+
+    function amankan(t) {
+        return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // urutkan dari yang terbaru
+    var daftar = DAFTAR_SERTIFIKAT.slice().sort(function (a, b) {
+        return b.tanggal.localeCompare(a.tanggal);
+    });
+
+    wadah.innerHTML = daftar.map(function (s) {
+        return '<div class="cert-item cp-reveal">' +
+               '<button type="button" class="cert-card"' +
+               ' data-full="src/img/cert/full/' + amankan(s.berkas) + '.jpg"' +
+               ' data-judul="' + amankan(s.judul) + '"' +
+               ' data-penerbit="' + amankan(s.penerbit) + '"' +
+               ' data-tanggal="' + amankan(tanggalTampil(s.tanggal)) + '">' +
+                 '<span class="cert-card__shot">' +
+                   '<span class="cert-card__tag">' + amankan(s.kategori) + '</span>' +
+                   '<img src="src/img/cert/thumb/' + amankan(s.berkas) + '.jpg" loading="lazy"' +
+                   ' alt="Sertifikat ' + amankan(s.judul) + ' dari ' + amankan(s.penerbit) + '">' +
+                 '</span>' +
+                 '<span class="cert-card__body">' +
+                   '<span class="cert-card__title">' + amankan(s.judul) + '</span>' +
+                   '<span class="cert-card__org">' + amankan(s.penerbit) + '</span>' +
+                   '<span class="cert-card__date">' + amankan(tanggalTampil(s.tanggal)) + '</span>' +
+                 '</span>' +
+                 '<span class="cert-card__zoom">[ klik perbesar ]</span>' +
+               '</button>' +
+               '</div>';
+    }).join('');
+
+    // Daftarkan kartu yang baru dibuat ke pengamat animasi scroll
+    if (typeof window.cpRevealAmati === 'function') {
+        window.cpRevealAmati(wadah.querySelectorAll('.cp-reveal'));
+    }
+
+    // ---- jendela perbesar ----
+    var box = document.querySelector('#cert-box');
+    var boxImg = box.querySelector('.cert-box__img');
+    var boxCap = box.querySelector('.cert-box__cap');
+    var pemicuTerakhir = null;
+
+    function buka(tombol) {
+        pemicuTerakhir = tombol;
+        boxImg.src = tombol.getAttribute('data-full');
+        boxImg.alt = 'Sertifikat ' + tombol.getAttribute('data-judul');
+        boxCap.innerHTML = '<b>' + tombol.getAttribute('data-judul') + '</b><br>' +
+                           tombol.getAttribute('data-penerbit') + ' &middot; ' +
+                           tombol.getAttribute('data-tanggal');
+        box.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+        box.querySelector('.cert-box__close').focus();
+    }
+
+    function tutup() {
+        box.classList.remove('is-open');
+        document.body.style.overflow = '';
+        boxImg.removeAttribute('src');
+        if (pemicuTerakhir) pemicuTerakhir.focus();
+    }
+
+    wadah.addEventListener('click', function (e) {
+        var t = e.target.closest('.cert-card');
+        if (t) buka(t);
+    });
+
+    box.addEventListener('click', function (e) {
+        // klik latar atau tombol tutup
+        if (e.target === box || e.target.closest('.cert-box__close')) tutup();
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && box.classList.contains('is-open')) tutup();
+    });
 })();
