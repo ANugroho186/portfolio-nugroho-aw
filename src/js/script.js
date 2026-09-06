@@ -322,3 +322,64 @@ var DAFTAR_SERTIFIKAT = [
         if (e.key === 'Escape' && box.classList.contains('is-open')) tutup();
     });
 })();
+
+// ============================================================
+// NAVIGASI AKTIF + TOMBOL KEMBALI KE ATAS
+// ============================================================
+(function () {
+    // ---------- 1) Menandai section yang sedang dibuka ----------
+    var tautan = document.querySelectorAll('#nav-menu a[href^="#"]');
+    var peta = {}, adaSection = false;
+    Array.prototype.forEach.call(tautan, function (a) {
+        var id = a.getAttribute('href').slice(1);
+        var sec = id && document.getElementById(id);
+        if (sec) { peta[id] = a; adaSection = true; }
+    });
+
+    if (adaSection && 'IntersectionObserver' in window) {
+        function bersihkan() {
+            Array.prototype.forEach.call(tautan, function (a) { a.classList.remove('is-active'); });
+        }
+        // Pita setebal 1 baris tepat di tengah layar: hanya section yang
+        // sedang melintasi tengah yang dianggap aktif, jadi tidak pernah
+        // ada dua penanda menyala bersamaan.
+        var pengamat = new IntersectionObserver(function (entri) {
+            entri.forEach(function (e) {
+                if (e.isIntersecting) {
+                    bersihkan();
+                    var a = peta[e.target.id];
+                    if (a) a.classList.add('is-active');
+                }
+            });
+        }, { rootMargin: '-50% 0px -50% 0px', threshold: 0 });
+
+        Object.keys(peta).forEach(function (id) {
+            pengamat.observe(document.getElementById(id));
+        });
+    }
+
+    // ---------- 2) Tombol kembali ke atas ----------
+    var tombol = document.querySelector('#ke-atas');
+    if (tombol) {
+        // Perilaku sembunyi-muncul hanya aktif kalau JavaScript berjalan;
+        // tanpa JS tombolnya tetap tampil dan tetap berfungsi sebagai anchor.
+        document.documentElement.classList.add('js-atas');
+
+        var AMBANG = 600, tampil = false, menunggu = false;
+
+        function periksa() {
+            var perlu = window.scrollY > AMBANG;
+            if (perlu !== tampil) {
+                tampil = perlu;
+                tombol.classList.toggle('terlihat', perlu);
+            }
+            menunggu = false;
+        }
+
+        window.addEventListener('scroll', function () {
+            if (!menunggu) { menunggu = true; requestAnimationFrame(periksa); }
+        }, { passive: true });
+
+        periksa();
+    }
+})();

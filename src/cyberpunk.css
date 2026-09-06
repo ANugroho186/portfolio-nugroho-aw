@@ -186,8 +186,13 @@ body::before {
 .cp-nav::after {
   content: '';
   position: absolute;
-  left: 32px;
-  right: 32px;
+  /* JANGAN pakai inset 32px di sini. Class mx-8 pada tautan adalah MARGIN,
+     bukan padding, jadi kotak <a> hanya selebar teksnya. Inset 32px di kiri
+     dan kanan (total 64px) melebihi lebar teks pendek seperti "Home", membuat
+     garisnya bernilai negatif alias tidak terlihat. Di mobile tautan melebar
+     penuh sehingga garisnya sempat muncul - itu sumber ketidakkonsistenannya. */
+  left: 0;
+  right: 0;
   bottom: 2px;
   height: 2px;
   background: var(--cp-yellow);
@@ -695,4 +700,223 @@ html.cp-reveal-on .cp-reveal-slice.cp-in {
 
 @media (max-width: 1023px) {
   .holo-wrap { max-width: 340px; margin-top: 2.5rem; }
+}
+
+/* ===== 21. NAVIGASI AKTIF (penanda section yang sedang dibuka) ===== */
+.cp-nav.is-active {
+  color: var(--cp-yellow) !important;
+  text-shadow: 0 0 10px rgba(252, 238, 10, .45);
+}
+
+.cp-nav.is-active::after {
+  transform: scaleX(1);
+}
+
+/* ===== 22. TOMBOL KEMBALI KE ATAS =====
+   Tanpa JavaScript tombol ini tetap tampil dan tetap berfungsi (dia hanya
+   sebuah <a href="#home">). JavaScript hanya menambah kelas js-atas pada
+   <html>, yang mengaktifkan perilaku sembunyi-muncul mengikuti scroll. */
+.cp-top {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 9995;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cp-yellow);
+  background: rgba(11, 16, 26, .82);
+  border: 1px solid rgba(252, 238, 10, .55);
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  transition: opacity .3s ease, transform .3s ease, background-color .2s ease, color .2s ease;
+}
+
+html.js-atas .cp-top {
+  opacity: 0;
+  transform: translateY(14px);
+  pointer-events: none;
+}
+
+html.js-atas .cp-top.terlihat {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.cp-top:hover,
+.cp-top:focus-visible {
+  background: var(--cp-yellow);
+  color: var(--cp-black);
+  outline: none;
+  animation: cp-btn-jitter .28s steps(2) 2;
+}
+
+.cp-top svg { width: 18px; height: 18px; }
+
+@media (max-width: 480px) {
+  .cp-top { right: 14px; bottom: 14px; width: 42px; height: 42px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cp-top { transition: opacity .2s ease; }
+  .cp-top:hover { animation: none; }
+}
+
+/* ===== 23. KARTU PORTFOLIO: bentuk & outline sirkuit =====
+   Bentuknya sengaja dibedakan dari kartu Certificate: kalau Certificate
+   memotong sudut kanan-atas & kiri-bawah, Portfolio memotong kiri-atas &
+   kanan-bawah, ditambah takik trapesium di tengah sisi atas. */
+.pf-item {
+  --pf-potong: 26px;
+  --pf-bentuk: polygon(
+    0 var(--pf-potong),
+    var(--pf-potong) 0,
+    calc(50% - 40px) 0,
+    calc(50% - 30px) 13px,
+    calc(50% + 30px) 13px,
+    calc(50% + 40px) 0,
+    100% 0,
+    100% calc(100% - var(--pf-potong)),
+    calc(100% - var(--pf-potong)) 100%,
+    0 100%
+  );
+  position: relative;
+  isolation: isolate;
+}
+
+/* lapisan outline: bentuk sama, sedikit lebih besar, hanya tepinya yang terlihat */
+.pf-item::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: 0;
+  clip-path: var(--pf-bentuk);
+  background: linear-gradient(135deg,
+    var(--cp-cyan) 0%,
+    rgba(6, 207, 206, .35) 38%,
+    rgba(252, 238, 10, .55) 72%,
+    var(--cp-yellow) 100%);
+  opacity: .55;
+  transition: opacity .3s ease;
+}
+
+.pf-item:hover::before { opacity: 1; }
+
+.pf-item > .cp-card {
+  clip-path: var(--pf-bentuk);
+  position: relative;
+  z-index: 1;
+}
+
+/* ---- hiasan sirkuit: garis + lingkaran terminal ---- */
+.pf-circuit {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  opacity: .75;
+  transition: opacity .3s ease;
+}
+
+.pf-item:hover .pf-circuit { opacity: 1; }
+
+.pf-circuit::before,
+.pf-circuit::after {
+  content: '';
+  position: absolute;
+  background: var(--cp-cyan);
+}
+
+/* terminal kiri-atas: garis mendatar + lingkaran di ujungnya */
+.pf-circuit--tl { top: 10px; left: -20px; width: 60px; height: 10px; }
+.pf-circuit--tl::before { left: 12px; top: 4px; width: 46px; height: 2px; }
+.pf-circuit--tl::after {
+  left: 0; top: 0; width: 9px; height: 9px;
+  background: transparent;
+  border: 2px solid var(--cp-cyan);
+  border-radius: 50%;
+}
+
+/* terminal kanan-bawah: garis mendatar + lingkaran, warna kuning */
+.pf-circuit--br { bottom: 10px; right: -20px; width: 60px; height: 10px; }
+.pf-circuit--br::before { right: 12px; top: 4px; width: 46px; height: 2px; background: var(--cp-yellow); }
+.pf-circuit--br::after {
+  right: 0; top: 0; width: 9px; height: 9px;
+  background: transparent;
+  border: 2px solid var(--cp-yellow);
+  border-radius: 50%;
+}
+
+/* strip arsir seperti bar data pada referensi */
+.pf-hatch {
+  position: absolute;
+  z-index: 2;
+  left: 34px;
+  top: -1px;
+  width: 74px;
+  height: 11px;
+  pointer-events: none;
+  background: repeating-linear-gradient(115deg,
+    var(--cp-cyan) 0 5px, transparent 5px 10px);
+  opacity: .8;
+  transform: skewX(-20deg);
+  transition: opacity .3s ease;
+}
+
+.pf-item:hover .pf-hatch { opacity: 1; }
+
+@media (max-width: 640px) {
+  .pf-circuit--tl { left: -12px; width: 48px; }
+  .pf-circuit--br { right: -12px; width: 48px; }
+  .pf-hatch { width: 56px; }
+}
+
+/* ===== 24. MENU DROPDOWN MOBILE BERGAYA CYBERPUNK ===== */
+@media (max-width: 1023px) {
+  #nav-menu {
+    background: rgba(9, 13, 22, .95) !important;
+    border: 1px solid rgba(6, 207, 206, .40);
+    border-radius: 0 !important;
+    box-shadow: 0 0 26px rgba(6, 207, 206, .18) !important;
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+
+  /* garis scanline tipis di dalam panel menu */
+  #nav-menu::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(to bottom, rgba(0, 240, 255, .05) 0 1px, transparent 1px 4px);
+  }
+
+  #nav-menu li { position: relative; }
+
+  #nav-menu a {
+    padding-left: 6px;
+    border-left: 2px solid transparent;
+    transition: border-color .2s ease, background-color .2s ease, padding-left .2s ease;
+  }
+
+  #nav-menu a:hover {
+    border-left-color: var(--cp-cyan);
+    background: rgba(6, 207, 206, .08);
+    padding-left: 12px;
+  }
+
+  /* Di mobile penanda section aktif berupa batang di tepi kiri, bukan garis
+     bawah - lebih terbaca pada daftar menu yang tersusun ke bawah. */
+  #nav-menu .cp-nav.is-active {
+    border-left-color: var(--cp-yellow);
+    background: rgba(252, 238, 10, .08);
+    padding-left: 12px;
+  }
+
+  #nav-menu .cp-nav::after,
+  #nav-menu .cp-nav.is-active::after { display: none; }
 }
