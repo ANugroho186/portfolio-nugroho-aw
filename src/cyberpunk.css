@@ -814,6 +814,31 @@ html.js-atas .cp-top.terlihat {
   z-index: 1;
 }
 
+/* ---- teks kartu ----
+   Judul dulunya putih dan posisinya digeser pakai translate-y persen. Karena
+   yang digeser adalah blok judul+deskripsi, kartu dengan deskripsi panjang
+   (PBO-HGLSA) judulnya terdorong ke tengah kartu, tepat di atas bagian terang
+   gambar, sehingga tidak terbaca.
+
+   Sekarang blok teks diikat ke sisi bawah kartu (bottom), dan deskripsi
+   dikeluarkan dari alur lewat pembungkus setinggi 0. Jadi posisi diam judul
+   selalu sama berapa pun panjang deskripsinya. Warnanya memakai kuning
+   Phantom Liberty dengan bayangan gelap supaya kontras di atas gambar terang
+   maupun overlay merah/hitam saat hover. */
+.pf-judul {
+  color: var(--cp-yellow);
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, .8),
+    0 0 12px rgba(0, 0, 0, .7),
+    0 0 30px rgba(10, 0, 5, .55);
+}
+
+.pf-teks {
+  text-shadow:
+    0 1px 3px rgba(0, 0, 0, .85),
+    0 0 16px rgba(0, 0, 0, .6);
+}
+
 /* ---- hiasan sirkuit: satu rangkaian yang bersambung ----
    Alurnya: bevel sudut -> bar arsir -> rel 2px -> garis -> lingkaran terminal.
    Tiap bagian menempel ke bagian berikutnya sehingga tidak ada ujung yang
