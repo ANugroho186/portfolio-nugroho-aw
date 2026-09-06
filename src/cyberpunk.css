@@ -156,7 +156,8 @@ body::before {
     20px 100%,
     0 calc(100% - 20px)
   );
-  transition: box-shadow .3s ease;
+  /* Tanpa transition box-shadow: clip-path di atas memotong box-shadow, jadi
+     bayangannya tidak pernah kelihatan tapi tetap memaksa repaint tiap frame. */
 }
 
 .cp-card::after {
@@ -175,10 +176,6 @@ body::before {
 }
 
 .cp-card:hover::after { opacity: 1; }
-
-.cp-card:hover {
-  box-shadow: 0 0 0 1px var(--cp-yellow), 0 0 28px rgba(229, 9, 63, .35);
-}
 
 /* ===== 7. LINK NAVIGASI: garis sapuan + glitch ===== */
 .cp-nav { position: relative; }
@@ -825,13 +822,27 @@ html.js-atas .cp-top.terlihat {
    selalu sama berapa pun panjang deskripsinya. Warnanya memakai kuning
    Phantom Liberty dengan bayangan gelap supaya kontras di atas gambar terang
    maupun overlay merah/hitam saat hover. */
+.pf-teksblok {
+  /* Animasinya transform, bukan `bottom`. Diukur di Chrome: satu kali hover
+     memicu 35 kali layout dengan `bottom`, hanya 2 kali dengan transform.
+     Karena pembungkus ini setinggi kartu, translateY persen selalu
+     menghasilkan jarak yang sama berapa pun panjang judul/deskripsinya. */
+  pointer-events: none;
+}
+
 .pf-judul {
   color: var(--cp-yellow);
+  /* Diredupkan saat diam supaya tidak mengalahkan gambar, penuh saat disentuh. */
+  opacity: .7;
+  transition: opacity .35s ease;
   text-shadow:
     0 2px 4px rgba(0, 0, 0, .8),
     0 0 12px rgba(0, 0, 0, .7),
     0 0 30px rgba(10, 0, 5, .55);
 }
+
+.cp-card:hover .pf-judul,
+.cp-card:focus-within .pf-judul { opacity: 1; }
 
 .pf-teks {
   text-shadow:
@@ -974,6 +985,67 @@ html.js-atas .cp-top.terlihat {
     --pf-bar: 30px;
     --pf-jalur: 14px;
   }
+}
+
+/* ===== 23c. HEMAT ANIMASI DI LAYAR KECIL =====
+   Biaya terbesar animasi kartu di HP adalah raster ulang: gambar 1264x900
+   yang diperbesar dan diputar tiap frame, di dalam wadah ber-clip-path. Itu
+   pekerjaan compositor, tidak terukur lewat metrik main-thread, jadi angka
+   pastinya tidak diklaim di sini - tapi di layar sekecil HP zoom-nya nyaris
+   tak terasa sementara biayanya penuh, jadi transform gambar dimatikan.
+
+   Ditambah: fade hiasan sirkuit dimatikan (opacity dibiarkan tetap) dan durasi
+   dipersingkat 500ms -> 300ms, sehingga lebih sedikit frame yang perlu digambar
+   dan terasa lebih responsif untuk sentuhan.
+
+   Umpan balik sentuh tetap ada: overlay menggelap, judul menyala, blok teks
+   naik, deskripsi muncul. */
+@media (max-width: 1023px) {
+  .pf-item .cp-card img {
+    transition: none;
+  }
+
+  .pf-item .cp-card:hover img,
+  .pf-item .cp-card:focus-within img {
+    --tw-rotate: 0deg;
+    --tw-scale-x: 1;
+    --tw-scale-y: 1;
+  }
+
+  .pf-item .pf-hatch,
+  .pf-item .pf-circuit {
+    transition: none;
+  }
+
+  .pf-teksblok,
+  .pf-judul,
+  .pf-teks,
+  .cp-card::after {
+    transition-duration: .3s;
+  }
+}
+
+/* Sapuan scan layar penuh adalah lapisan fixed yang animasinya jalan terus di
+   atas seluruh halaman. Di HP biayanya tidak sebanding dengan efeknya yang
+   nyaris tak terlihat, jadi dimatikan. Scanline statis tetap dipertahankan. */
+/* Di layar paling sempit deskripsi terpanjang nyaris menyentuh dasar kartu.
+   Mengecilkan sedikit ukuran teksnya menghemat satu-dua baris tanpa harus
+   memangkas isinya. */
+@media (max-width: 400px) {
+  .pf-teks {
+    font-size: .8125rem;
+    line-height: 1.45;
+  }
+}
+
+@media (max-width: 640px) {
+  body::before { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { display: none; }
+  .pf-teksblok,
+  .pf-item .cp-card img { transition-duration: .01ms; }
 }
 
 /* ===== 24. MENU DROPDOWN MOBILE BERGAYA CYBERPUNK ===== */
