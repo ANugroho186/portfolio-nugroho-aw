@@ -772,6 +772,8 @@ html.js-atas .cp-top.terlihat {
    kanan-bawah, ditambah takik trapesium di tengah sisi atas. */
 .pf-item {
   --pf-potong: 26px;
+  --pf-bar: 90px;   /* panjang bar arsir, wajib kelipatan 10 */
+  --pf-jalur: 40px; /* panjang garis setelah bar */
   --pf-bentuk: polygon(
     0 var(--pf-potong),
     var(--pf-potong) 0,
@@ -812,66 +814,141 @@ html.js-atas .cp-top.terlihat {
   z-index: 1;
 }
 
-/* ---- hiasan sirkuit: garis + lingkaran terminal ---- */
-.pf-circuit {
+/* ---- hiasan sirkuit: satu rangkaian yang bersambung ----
+   Alurnya: bevel sudut -> bar arsir -> rel 2px -> garis -> lingkaran terminal.
+   Tiap bagian menempel ke bagian berikutnya sehingga tidak ada ujung yang
+   mengambang, dan semuanya berada di dalam batas kartu supaya aman di lebar
+   berapa pun serta tidak menabrak takik di tengah sisi atas.
+
+   Fase arsir sengaja digeser (transparan 0-3px) supaya tepi kiri & kanan bar
+   selalu jatuh di tengah celah; dengan skew -20deg pergeseran maksimalnya
+   +-1.8px, jadi tidak pernah ada potongan strip separuh di ujung bar. Lebar
+   bar wajib kelipatan 10px agar fase di kedua ujung tetap sama. */
+
+.pf-hatch {
   position: absolute;
   z-index: 2;
+  width: var(--pf-bar);
+  height: 12px;
+  overflow: hidden;
   pointer-events: none;
-  opacity: .75;
+  opacity: .85;
   transition: opacity .3s ease;
 }
 
-.pf-item:hover .pf-circuit { opacity: 1; }
+.pf-hatch::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -10px;
+  right: -10px;
+  transform: skewX(-20deg);
+}
+
+.pf-hatch--tl {
+  top: 0;
+  left: var(--pf-potong);
+  border-bottom: 2px solid var(--cp-cyan);
+}
+
+.pf-hatch--tl::before {
+  background: repeating-linear-gradient(to right,
+    transparent 0 3px, var(--cp-cyan) 3px 7px, transparent 7px 10px);
+}
+
+.pf-hatch--br {
+  bottom: 0;
+  right: var(--pf-potong);
+  border-top: 2px solid var(--cp-yellow);
+}
+
+.pf-hatch--br::before {
+  background: repeating-linear-gradient(to right,
+    transparent 0 3px, var(--cp-yellow) 3px 7px, transparent 7px 10px);
+}
+
+/* garis + lingkaran terminal, menyambung dari ujung bar arsir */
+.pf-circuit {
+  position: absolute;
+  z-index: 2;
+  height: 12px;
+  width: calc(var(--pf-jalur) + 11px);
+  pointer-events: none;
+  opacity: .85;
+  transition: opacity .3s ease;
+}
 
 .pf-circuit::before,
 .pf-circuit::after {
   content: '';
   position: absolute;
+}
+
+.pf-circuit::after {
+  /* box-sizing: border-box, jadi 9px sudah termasuk border 2px:
+     lubang di tengahnya 5px. */
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.pf-circuit--tl {
+  top: 0;
+  left: calc(var(--pf-potong) + var(--pf-bar));
+}
+
+.pf-circuit--tl::before {
+  left: 0;
+  bottom: 0;
+  width: var(--pf-jalur);
+  height: 2px;
   background: var(--cp-cyan);
 }
 
-/* terminal kiri-atas: garis mendatar + lingkaran di ujungnya */
-.pf-circuit--tl { top: 10px; left: -20px; width: 60px; height: 10px; }
-.pf-circuit--tl::before { left: 12px; top: 4px; width: 46px; height: 2px; }
 .pf-circuit--tl::after {
-  left: 0; top: 0; width: 9px; height: 9px;
-  background: transparent;
+  left: var(--pf-jalur);
+  bottom: -3.5px;
   border: 2px solid var(--cp-cyan);
-  border-radius: 50%;
 }
 
-/* terminal kanan-bawah: garis mendatar + lingkaran, warna kuning */
-.pf-circuit--br { bottom: 10px; right: -20px; width: 60px; height: 10px; }
-.pf-circuit--br::before { right: 12px; top: 4px; width: 46px; height: 2px; background: var(--cp-yellow); }
+.pf-circuit--br {
+  bottom: 0;
+  right: calc(var(--pf-potong) + var(--pf-bar));
+}
+
+.pf-circuit--br::before {
+  right: 0;
+  top: 0;
+  width: var(--pf-jalur);
+  height: 2px;
+  background: var(--cp-yellow);
+}
+
 .pf-circuit--br::after {
-  right: 0; top: 0; width: 9px; height: 9px;
-  background: transparent;
+  right: var(--pf-jalur);
+  top: -3.5px;
   border: 2px solid var(--cp-yellow);
-  border-radius: 50%;
 }
 
-/* strip arsir seperti bar data pada referensi */
-.pf-hatch {
-  position: absolute;
-  z-index: 2;
-  left: 34px;
-  top: -1px;
-  width: 74px;
-  height: 11px;
-  pointer-events: none;
-  background: repeating-linear-gradient(115deg,
-    var(--cp-cyan) 0 5px, transparent 5px 10px);
-  opacity: .8;
-  transform: skewX(-20deg);
-  transition: opacity .3s ease;
-}
+.pf-item:hover .pf-hatch,
+.pf-item:hover .pf-circuit { opacity: 1; }
 
-.pf-item:hover .pf-hatch { opacity: 1; }
-
+/* Kartu mobile jauh lebih sempit, jadi rangkaian dipendekkan agar tidak
+   sampai menyentuh takik trapesium di tengah sisi atas. */
 @media (max-width: 640px) {
-  .pf-circuit--tl { left: -12px; width: 48px; }
-  .pf-circuit--br { right: -12px; width: 48px; }
-  .pf-hatch { width: 56px; }
+  .pf-item {
+    --pf-bar: 50px;
+    --pf-jalur: 24px;
+  }
+}
+
+@media (max-width: 380px) {
+  .pf-item {
+    --pf-bar: 30px;
+    --pf-jalur: 14px;
+  }
 }
 
 /* ===== 24. MENU DROPDOWN MOBILE BERGAYA CYBERPUNK ===== */
