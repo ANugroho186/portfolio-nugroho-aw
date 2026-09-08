@@ -830,19 +830,36 @@ html.js-atas .cp-top.terlihat {
   pointer-events: none;
 }
 
+/* Judul dipasang di atas plat gelap bersudut potong, bukan melayang langsung
+   di atas foto. Garis atas plat memakai cyan yang sama dengan hiasan sirkuit
+   sudut kartu, jadi judul terbaca sebagai bagian dari bingkai kartu - bukan
+   teks yang kebetulan menumpang di atas gambar.
+
+   Latarnya warna solid ber-alpha (bukan gradient) supaya bisa ditransisikan;
+   gradient tidak bisa dianimasikan dan akan meloncat. */
 .pf-judul {
-  color: var(--cp-yellow);
-  /* Diredupkan saat diam supaya tidak mengalahkan gambar, penuh saat disentuh. */
-  opacity: .7;
-  transition: opacity .35s ease;
-  text-shadow:
-    0 2px 4px rgba(0, 0, 0, .8),
-    0 0 12px rgba(0, 0, 0, .7),
-    0 0 30px rgba(10, 0, 5, .55);
+  display: block;
+  padding: 11px 18px 13px;
+  color: rgba(252, 238, 10, .78);
+  background-color: rgba(11, 11, 16, .5);
+  border-top: 2px solid rgba(0, 240, 255, .42);
+  clip-path: polygon(
+    0 0, 100% 0,
+    100% calc(100% - 12px), calc(100% - 12px) 100%,
+    0 100%);
+  /* Warna teks diredupkan saat diam supaya tidak mengalahkan gambar. Sengaja
+     tidak memakai opacity pada elemen: itu ikut memudarkan platnya sehingga
+     jadi abu-abu kusam di atas gambar yang terang. */
+  transition: color .35s ease, background-color .35s ease, border-color .35s ease;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, .75);
 }
 
 .cp-card:hover .pf-judul,
-.cp-card:focus-within .pf-judul { opacity: 1; }
+.cp-card:focus-within .pf-judul {
+  color: var(--cp-yellow);
+  background-color: rgba(11, 11, 16, .85);
+  border-top-color: var(--cp-yellow);
+}
 
 .pf-teks {
   text-shadow:
@@ -1093,4 +1110,396 @@ html.js-atas .cp-top.terlihat {
 
   #nav-menu .cp-nav::after,
   #nav-menu .cp-nav.is-active::after { display: none; }
+}
+
+/* ===== 25. PANEL URUT & SARING SERTIFIKAT =====
+   Tombolnya hanya muncul kalau JavaScript berjalan (class js-cert dipasang
+   oleh script). Tanpa JS grid sertifikatnya memang tidak terbangun, jadi
+   percuma menampilkan tombol yang tidak bisa berbuat apa-apa. */
+.cert-bar { display: none; }
+
+html.js-cert .cert-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 26px;
+  max-width: 1120px;
+  margin: 0 auto 34px;
+  padding: 14px 18px;
+  background: rgba(11, 11, 16, .55);
+  border: 1px solid rgba(0, 240, 255, .28);
+  clip-path: polygon(
+    0 0, calc(100% - 14px) 0, 100% 14px,
+    100% 100%, 14px 100%, 0 calc(100% - 14px));
+}
+
+.cert-bar__grup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.cert-bar__label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(0, 240, 255, .75);
+  margin-right: 4px;
+}
+
+.cert-chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .78rem;
+  line-height: 1;
+  padding: 8px 14px;
+  color: #ececed;
+  background: rgba(0, 240, 255, .07);
+  border: 1px solid rgba(0, 240, 255, .35);
+  cursor: pointer;
+  transition: color .2s ease, background-color .2s ease, border-color .2s ease;
+  clip-path: polygon(
+    0 0, calc(100% - 8px) 0, 100% 8px,
+    100% 100%, 8px 100%, 0 calc(100% - 8px));
+}
+
+.cert-chip:hover { border-color: var(--cp-cyan); background: rgba(0, 240, 255, .16); }
+
+.cert-chip:focus-visible {
+  outline: 2px solid var(--cp-yellow);
+  outline-offset: 2px;
+}
+
+.cert-chip.is-active {
+  color: var(--cp-black);
+  background: var(--cp-yellow);
+  border-color: var(--cp-yellow);
+  font-weight: 700;
+}
+
+.cert-bar__hitung {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  letter-spacing: .1em;
+  color: rgba(236, 236, 237, .6);
+}
+
+.cert-kosong {
+  grid-column: 1 / -1;
+  padding: 40px 0;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  color: rgba(236, 236, 237, .7);
+}
+
+/* ===== 26. LINIMASA PENDIDIKAN & PENGALAMAN =====
+   Rel tunggal di kiri untuk semua ukuran layar. Sengaja tidak memakai pola
+   zig-zag kiri-kanan: di lebar menengah pola itu gampang pecah dan urutan
+   bacanya jadi ambigu. */
+.jr-line {
+  position: relative;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 0 0 34px;
+  list-style: none;
+}
+
+.jr-line::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: linear-gradient(to bottom,
+    var(--cp-cyan) 0%,
+    rgba(0, 240, 255, .35) 55%,
+    rgba(252, 238, 10, .55) 100%);
+}
+
+.jr-item {
+  position: relative;
+  padding-bottom: 26px;
+}
+
+.jr-item:last-child { padding-bottom: 0; }
+
+/* Simpul berbentuk belah ketupat, senada dengan sudut kartu yang terpotong */
+.jr-dot {
+  position: absolute;
+  left: -34px;
+  top: 20px;
+  width: 12px;
+  height: 12px;
+  background: var(--cp-yellow);
+  border: 2px solid var(--cp-black);
+  transform: rotate(45deg);
+}
+
+.jr-card {
+  position: relative;
+  padding: 18px 22px;
+  background: rgba(11, 11, 16, .5);
+  border: 1px solid rgba(0, 240, 255, .26);
+  border-left: 3px solid var(--cp-cyan);
+  transition: border-color .25s ease, background-color .25s ease;
+  clip-path: polygon(
+    0 0, calc(100% - 16px) 0, 100% 16px,
+    100% 100%, 16px 100%, 0 calc(100% - 16px));
+}
+
+.jr-item:hover .jr-card {
+  background: rgba(11, 11, 16, .68);
+  border-color: rgba(252, 238, 10, .55);
+  border-left-color: var(--cp-yellow);
+}
+
+.jr-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.jr-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .66rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  color: var(--cp-black);
+  clip-path: polygon(
+    0 0, calc(100% - 6px) 0, 100% 6px,
+    100% 100%, 6px 100%, 0 calc(100% - 6px));
+}
+
+.jr-tag--studi { background: var(--cp-cyan); }
+.jr-tag--kerja { background: var(--cp-yellow); }
+
+.jr-waktu {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .78rem;
+  color: rgba(0, 240, 255, .82);
+}
+
+.jr-waktu i { font-style: normal; color: rgba(236, 236, 237, .55); }
+
+.jr-judul {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ececed;
+  margin-bottom: 2px;
+}
+
+.jr-org {
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--cp-yellow);
+  margin-bottom: 8px;
+}
+
+.jr-teks {
+  font-size: .9rem;
+  line-height: 1.6;
+  color: rgba(236, 236, 237, .8);
+}
+
+@media (max-width: 640px) {
+  .jr-line { padding-left: 26px; }
+  .jr-dot { left: -26px; top: 18px; width: 10px; height: 10px; }
+  .jr-card { padding: 15px 16px; }
+  .jr-judul { font-size: 1rem; }
+
+  html.js-cert .cert-bar { gap: 10px 16px; padding: 12px 14px; }
+  .cert-bar__hitung { margin-left: 0; width: 100%; }
+}
+
+
+/* ===== 27. KARTU AKSES YANG MIRING MENGIKUTI KURSOR =====
+   Miringnya digerakkan oleh dua custom property (--rx / --ry) yang diisi JS,
+   jadi yang berubah tiap frame hanya transform - murni kerja compositor,
+   tidak ada layout ulang. Tanpa JS kartunya tetap tampil rata dan terbaca.
+
+   Isinya sengaja hanya data yang memang benar (nama, peran, jurusan, kampus).
+   Tidak ada nomor induk atau "clearance level" karangan: itu akan terbaca
+   seperti kartu identitas palsu, bukan hiasan. */
+.idc {
+  perspective: 900px;
+}
+
+.idc__in {
+  --rx: 0deg;
+  --ry: 0deg;
+  position: relative;
+  padding: 22px 24px 18px;
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  background:
+    linear-gradient(150deg, rgba(0, 240, 255, .09), transparent 42%),
+    linear-gradient(180deg, rgba(17, 12, 38, .96), rgba(9, 7, 20, .98));
+  border: 1px solid rgba(0, 240, 255, .38);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .5);
+  clip-path: polygon(
+    0 22px, 22px 0,
+    100% 0, 100% calc(100% - 22px),
+    calc(100% - 22px) 100%, 0 100%);
+}
+
+/* Saat kursor pergi, kartunya kembali rata dengan pelan. Selama kursor masih
+   di atas kartu transisi dimatikan supaya gerakannya menempel di kursor. */
+.idc__in.is-pulang {
+  transition: transform .5s cubic-bezier(.22, .61, .36, 1);
+}
+
+.idc__garis {
+  position: absolute;
+  inset: 7px;
+  pointer-events: none;
+  border: 1px solid rgba(0, 240, 255, .16);
+  clip-path: polygon(
+    0 16px, 16px 0,
+    100% 0, 100% calc(100% - 16px),
+    calc(100% - 16px) 100%, 0 100%);
+}
+
+.idc__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(0, 240, 255, .22);
+}
+
+.idc__logo {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--cp-cyan);
+  letter-spacing: .04em;
+}
+
+.idc__logo b { color: var(--cp-pink); font-weight: 700; }
+
+.idc__jenis {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .62rem;
+  letter-spacing: .22em;
+  color: rgba(252, 238, 10, .85);
+}
+
+.idc__label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .58rem;
+  letter-spacing: .2em;
+  color: rgba(0, 240, 255, .55);
+  margin-bottom: 2px;
+}
+
+.idc__label + p { margin-bottom: 12px; }
+
+.idc__nama {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #ececed;
+}
+
+.idc__role {
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--cp-yellow);
+}
+
+.idc__afil {
+  font-size: .82rem;
+  line-height: 1.5;
+  color: rgba(236, 236, 237, .78);
+}
+
+.idc__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-top: 12px;
+  margin-top: 2px;
+  border-top: 1px solid rgba(0, 240, 255, .22);
+}
+
+.idc__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .62rem;
+  letter-spacing: .2em;
+  color: rgba(236, 236, 237, .7);
+}
+
+.idc__status i {
+  width: 7px;
+  height: 7px;
+  background: #35e07a;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(53, 224, 122, .9);
+}
+
+/* Pita garis-garis, murni hiasan - bukan barcode yang bisa dipindai */
+.idc__pita {
+  flex: 1;
+  max-width: 132px;
+  height: 20px;
+  background: repeating-linear-gradient(to right,
+    rgba(236, 236, 237, .75) 0 2px,
+    transparent 2px 4px,
+    rgba(236, 236, 237, .75) 4px 5px,
+    transparent 5px 9px);
+  opacity: .5;
+}
+
+/* Pantulan cahaya yang mengikuti posisi kursor di atas kartu */
+.idc__kilau {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .35s ease;
+  background: radial-gradient(
+    240px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(0, 240, 255, .22),
+    transparent 62%);
+  clip-path: polygon(
+    0 22px, 22px 0,
+    100% 0, 100% calc(100% - 22px),
+    calc(100% - 22px) 100%, 0 100%);
+}
+
+.idc.is-aktif .idc__kilau { opacity: 1; }
+
+.idc__petunjuk {
+  margin-top: 12px;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem;
+  letter-spacing: .16em;
+  color: rgba(236, 236, 237, .45);
+}
+
+/* Layar sentuh tidak punya kursor yang melayang, jadi petunjuknya diganti
+   dan kemiringannya dijalankan lewat sentuhan (pointermove menangani
+   keduanya). */
+@media (hover: none) {
+  .idc__petunjuk::after { content: 'drag the card to tilt it'; }
+  .idc__petunjuk span { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .idc__in { transform: none !important; }
 }

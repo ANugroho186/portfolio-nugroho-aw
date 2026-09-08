@@ -69,6 +69,9 @@
                                 <a href="#portfolio" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary cp-nav cp-glitch" style="font-family: JetBrains Mono, serif;">Portfolio</a>
                             </li>
                             <li class="group">
+                                <a href="#journey" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary cp-nav cp-glitch" style="font-family: JetBrains Mono, serif;">Journey</a>
+                            </li>
+                            <li class="group">
                                 <a href="#certificate" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary cp-nav cp-glitch" style="font-family: JetBrains Mono, serif;">Certificate</a>
                             </li>
                             <li class="group">
@@ -417,6 +420,61 @@
     </section>
     Clients Section End -->
 
+    <!-- Journey Section Start -->
+
+    <section id="journey" class="pt-36 pb-20 bg-darkred">
+        <div class="container">
+            <div class="w-full px-4">
+                <div class="cp-reveal cp-reveal-slice max-w-xl mx-auto text-center mb-16">
+                    <h4 class="font-semibold text-lg text-primary cp-glitch mb-2" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">Journey</span>]</h4>
+                    <h2 class="font-bold text-youngcyan text-3xl mb-4 sm:text-4xl lg:text-5xl">Education &amp; Experience</h2>
+                    <p class="font-medium text-md text-white md:text-lg">Where I have studied and worked so far, most recent first.</p>
+                </div>
+            </div>
+            <div class="w-full px-4">
+                <ol class="jr-line">
+                    <li class="jr-item cp-reveal">
+                        <span class="jr-dot" aria-hidden="true"></span>
+                        <article class="jr-card">
+                            <p class="jr-meta">
+                                <span class="jr-tag jr-tag--studi">Education</span>
+                                <span class="jr-waktu"><time datetime="2022-06-27">Jun 2022</time> &ndash; <time datetime="2026-12-15">Dec 2026</time> <i>(expected)</i></span>
+                            </p>
+                            <h3 class="jr-judul">B.Eng. in Informatics Engineering</h3>
+                            <p class="jr-org">Universitas Mercu Buana</p>
+                            <p class="jr-teks">Final-year thesis on multi-objective employee shift scheduling optimisation, applied at PT. Asfak Jaya Construction.</p>
+                        </article>
+                    </li>
+                    <li class="jr-item cp-reveal">
+                        <span class="jr-dot" aria-hidden="true"></span>
+                        <article class="jr-card">
+                            <p class="jr-meta">
+                                <span class="jr-tag jr-tag--kerja">Experience</span>
+                                <span class="jr-waktu"><time datetime="2025-03-10">Mar 2025</time> &ndash; <time datetime="2026-06-20">Jun 2026</time></span>
+                            </p>
+                            <h3 class="jr-judul">Software Engineer Intern</h3>
+                            <p class="jr-org">PT. Asfak Jaya Construction</p>
+                            <p class="jr-teks">Built the scheduling and attendance module of the company&rsquo;s internal system: employee, division and position data, shift scheduling, attendance records, leave approval and Excel export.</p>
+                        </article>
+                    </li>
+                    <li class="jr-item cp-reveal">
+                        <span class="jr-dot" aria-hidden="true"></span>
+                        <article class="jr-card">
+                            <p class="jr-meta">
+                                <span class="jr-tag jr-tag--studi">Education</span>
+                                <span class="jr-waktu"><time datetime="2019-06-26">Jun 2019</time> &ndash; <time datetime="2022-05-10">May 2022</time></span>
+                            </p>
+                            <h3 class="jr-judul">Senior High School</h3>
+                            <p class="jr-org">SMAN 32 Jakarta</p>
+                        </article>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <!-- Journey Section End -->
+
     
     <!-- Certificate Section Start -->
 
@@ -430,6 +488,22 @@
                 </div>
             </div>
             <div class="w-full px-4">
+                <div class="cert-bar" id="cert-bar">
+                    <div class="cert-bar__grup" role="group" aria-label="Sort certificates">
+                        <span class="cert-bar__label">Sort</span>
+                        <button type="button" class="cert-chip is-active" data-urut="baru">Newest</button>
+                        <button type="button" class="cert-chip" data-urut="lama">Oldest</button>
+                        <button type="button" class="cert-chip" data-urut="judul">A&ndash;Z</button>
+                    </div>
+                    <div class="cert-bar__grup" role="group" aria-label="Filter by category">
+                        <span class="cert-bar__label">Category</span>
+                        <button type="button" class="cert-chip is-active" data-kategori="">All</button>
+                        <button type="button" class="cert-chip" data-kategori="Profesi">Professional</button>
+                        <button type="button" class="cert-chip" data-kategori="Kursus">Course</button>
+                        <button type="button" class="cert-chip" data-kategori="Akademik">Academic</button>
+                    </div>
+                    <p class="cert-bar__hitung" id="cert-hitung" aria-live="polite"></p>
+                </div>
                 <div id="cert-grid" class="cert-grid"></div>
             </div>
         </div>
@@ -504,7 +578,30 @@
                 <div class="cp-reveal cp-reveal-slice max-w-xl mx-auto text-center mb-16">
                     <h4 class="font-semibold text-lg text-primary cp-glitch mb-2" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">Contact</span>]</h4>
                     <h2 class="font-bold text-youngcyan text-3xl mb-4 sm:text-4xl lg:text-5xl">Have a Question?</h2>
-                    <p class="font-medium text-md text-white md:text-lg">Have questions, suggestions, or need assistance? Feel free to reach out to us. Our team is ready to help you!</p>
+                    <p class="font-medium text-md text-white md:text-lg">Have a question, a suggestion, or a project in mind? Feel free to reach out &mdash; I read every message.</p>
+                </div>
+                <div class="cp-reveal mx-auto mb-14 max-w-sm">
+                    <div class="idc" id="idc">
+                        <div class="idc__in">
+                            <span class="idc__garis" aria-hidden="true"></span>
+                            <div class="idc__head">
+                                <span class="idc__logo">[<b>NAW</b>]</span>
+                                <span class="idc__jenis">ACCESS CARD</span>
+                            </div>
+                            <p class="idc__label">NAME</p>
+                            <p class="idc__nama">Nugroho Agung Wibisono</p>
+                            <p class="idc__label">ROLE</p>
+                            <p class="idc__role">Software Engineer</p>
+                            <p class="idc__label">AFFILIATION</p>
+                            <p class="idc__afil">Informatics Engineering &middot; Universitas Mercu Buana</p>
+                            <div class="idc__foot">
+                                <span class="idc__status"><i aria-hidden="true"></i> ONLINE</span>
+                                <span class="idc__pita" aria-hidden="true"></span>
+                            </div>
+                            <span class="idc__kilau" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                    <p class="idc__petunjuk" aria-hidden="true"><span>hover the card to tilt it</span></p>
                 </div>
                 <div class="cp-reveal cp-reveal-slice max-w-xl mx-auto text-center mb-16">
                     <a href="mailto:nugroho.a.wibisono@gmail.com" target="_blank" class="text-base font-semibold

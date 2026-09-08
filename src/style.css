@@ -209,7 +209,29 @@ img-card {
   background: linear-gradient(180deg, #241a44 0%, #17102e 55%, #241a44 100%);
 }
 
-/* Grid perspektif neon (gaya Night City) */
+/* Grid perspektif neon (gaya Night City)
+
+   Garis horizontalnya sempat berkedip. Penyebabnya ketebalan garis, bukan cara
+   animasinya: geseran latarnya sub-pixel (80px per 7 detik = 0,19px per frame),
+   dan makin tebal garisnya makin besar perubahan anti-aliasing tiap frame.
+   Saat di-zoom kedipnya hilang karena resolusi efektifnya naik.
+
+   Diukur di zona garis rapat dekat horizon - goyangan luminansi antar-frame,
+   makin kecil makin tenang (grid diam = 0,0000):
+
+     2px  alpha .62            0,0349   <- versi yang berkedip
+     1px  alpha .55            0,0155   <- versi asli sebelum dipertebal
+     1,5px alpha .70 + mask 70% 0,0078   <- dipakai sekarang
+
+   Jadi garisnya tetap terbaca lebih tebal daripada versi 1px yang asli, tapi
+   lebih tenang daripada keduanya.
+
+   Yang sudah dicoba dan TIDAK terbukti membantu, jadi tidak dipakai:
+   - memindahkan animasi ke transform pada elemen terpisah: 0,0062 vs 0,0078,
+     selisihnya sepele padahal kerja main-thread naik 26% dan kodenya dua kali
+     lebih panjang;
+   - memberi tepi garis ekor gradasi lunak sebagai pra-penghalusan: justru
+     sedikit lebih buruk (0,0300 vs 0,0264 pada uji setara). */
 #contact::before {
   content: '';
   position: absolute;
@@ -220,11 +242,14 @@ img-card {
   transform: translateX(-50%) perspective(520px) rotateX(57deg);
   transform-origin: bottom center;
   background-image:
-    linear-gradient(to right, rgba(6, 207, 206, 0.55) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(6, 207, 206, 0.55) 1px, transparent 1px);
+    linear-gradient(to right, rgba(6, 207, 206, 0.70) 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, rgba(6, 207, 206, 0.70) 1.5px, transparent 1.5px);
   background-size: 80px 80px;
-  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 12%, transparent 78%);
-  mask-image: linear-gradient(to top, #000 0%, #000 12%, transparent 78%);
+  /* Dipotong sedikit lebih awal dari aslinya (78% -> 70%): di atas titik itu
+     jarak antar-garis sudah di bawah beberapa piksel karena perspektif. Dicek
+     berdampingan, potongan ini praktis tidak mengubah tampilan. */
+  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 12%, transparent 70%);
+  mask-image: linear-gradient(to top, #000 0%, #000 12%, transparent 70%);
   animation: grid-scroll 7s linear infinite;
   pointer-events: none;
 }
