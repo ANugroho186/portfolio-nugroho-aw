@@ -251,12 +251,31 @@ var DAFTAR_SERTIFIKAT = [
         return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    // urutkan dari yang terbaru
-    var daftar = DAFTAR_SERTIFIKAT.slice().sort(function (a, b) {
-        return b.tanggal.localeCompare(a.tanggal);
-    });
+    // ---- urutan & saringan ----
+    // Panel kendalinya dibiarkan tersembunyi sampai JavaScript menyalakannya,
+    // supaya tanpa JS tidak ada tombol mati yang menggantung (gridnya sendiri
+    // memang dibangun oleh JS).
+    // Nilai `kategori` di data tetap berbahasa Indonesia karena dipakai sebagai
+    // kunci saringan; yang tampil di layar diterjemahkan lewat peta ini supaya
+    // label chip dan badge kartu tidak berbeda.
+    var LABEL_KATEGORI = {
+        Profesi:  'Professional',
+        Kursus:   'Course',
+        Akademik: 'Academic'
+    };
 
-    wadah.innerHTML = daftar.map(function (s) {
+    var URUT = {
+        baru:  function (a, b) { return b.tanggal.localeCompare(a.tanggal); },
+        lama:  function (a, b) { return a.tanggal.localeCompare(b.tanggal); },
+        judul: function (a, b) { return a.judul.localeCompare(b.judul, 'id'); }
+    };
+
+    var bar = document.querySelector('#cert-bar');
+    var hitung = document.querySelector('#cert-hitung');
+    var pilihUrut = 'baru';
+    var pilihKategori = '';
+
+    function kartuHtml(s) {
         return '<div class="cert-item cp-reveal">' +
                '<button type="button" class="cert-card"' +
                ' data-full="src/img/cert/full/' + amankan(s.berkas) + '.jpg"' +
@@ -264,24 +283,70 @@ var DAFTAR_SERTIFIKAT = [
                ' data-penerbit="' + amankan(s.penerbit) + '"' +
                ' data-tanggal="' + amankan(tanggalTampil(s.tanggal)) + '">' +
                  '<span class="cert-card__shot">' +
-                   '<span class="cert-card__tag">' + amankan(s.kategori) + '</span>' +
+                   '<span class="cert-card__tag">' + amankan(LABEL_KATEGORI[s.kategori] || s.kategori) + '</span>' +
                    '<img src="src/img/cert/thumb/' + amankan(s.berkas) + '.jpg" loading="lazy"' +
-                   ' alt="Sertifikat ' + amankan(s.judul) + ' dari ' + amankan(s.penerbit) + '">' +
+                   ' alt="' + amankan(s.judul) + ' certificate from ' + amankan(s.penerbit) + '">' +
                  '</span>' +
                  '<span class="cert-card__body">' +
                    '<span class="cert-card__title">' + amankan(s.judul) + '</span>' +
                    '<span class="cert-card__org">' + amankan(s.penerbit) + '</span>' +
                    '<span class="cert-card__date">' + amankan(tanggalTampil(s.tanggal)) + '</span>' +
                  '</span>' +
-                 '<span class="cert-card__zoom">[ klik perbesar ]</span>' +
+                 '<span class="cert-card__zoom">[ click to enlarge ]</span>' +
                '</button>' +
                '</div>';
-    }).join('');
-
-    // Daftarkan kartu yang baru dibuat ke pengamat animasi scroll
-    if (typeof window.cpRevealAmati === 'function') {
-        window.cpRevealAmati(wadah.querySelectorAll('.cp-reveal'));
     }
+
+    function gambar() {
+        var daftar = DAFTAR_SERTIFIKAT.filter(function (s) {
+            return !pilihKategori || s.kategori === pilihKategori;
+        }).sort(URUT[pilihUrut]);
+
+        wadah.innerHTML = daftar.length
+            ? daftar.map(kartuHtml).join('')
+            : '<p class="cert-kosong">No certificate in this category yet.</p>';
+
+        if (hitung) {
+            hitung.textContent = daftar.length + ' of ' + DAFTAR_SERTIFIKAT.length + ' shown';
+        }
+
+        // Kartu baru dibuat ulang tiap kali, jadi harus didaftarkan lagi ke
+        // pengamat animasi scroll - kalau tidak, kartunya tidak pernah muncul.
+        if (typeof window.cpRevealAmati === 'function') {
+            window.cpRevealAmati(wadah.querySelectorAll('.cp-reveal'));
+        }
+    }
+
+    if (bar) {
+        document.documentElement.classList.add('js-cert');
+
+        bar.addEventListener('click', function (e) {
+            var t = e.target.closest('.cert-chip');
+            if (!t) return;
+
+            var jenis = t.hasAttribute('data-urut') ? 'data-urut' : 'data-kategori';
+            if (jenis === 'data-urut') {
+                pilihUrut = t.getAttribute('data-urut');
+            } else {
+                pilihKategori = t.getAttribute('data-kategori');
+            }
+
+            // hanya tandai tombol dalam kelompok yang sama
+            var sekelompok = t.parentNode.querySelectorAll('.cert-chip');
+            Array.prototype.forEach.call(sekelompok, function (b) {
+                b.classList.toggle('is-active', b === t);
+                b.setAttribute('aria-pressed', b === t ? 'true' : 'false');
+            });
+
+            gambar();
+        });
+
+        Array.prototype.forEach.call(bar.querySelectorAll('.cert-chip'), function (b) {
+            b.setAttribute('aria-pressed', b.classList.contains('is-active') ? 'true' : 'false');
+        });
+    }
+
+    gambar();
 
     // ---- jendela perbesar ----
     var box = document.querySelector('#cert-box');
@@ -292,7 +357,7 @@ var DAFTAR_SERTIFIKAT = [
     function buka(tombol) {
         pemicuTerakhir = tombol;
         boxImg.src = tombol.getAttribute('data-full');
-        boxImg.alt = 'Sertifikat ' + tombol.getAttribute('data-judul');
+        boxImg.alt = tombol.getAttribute('data-judul') + ' certificate';
         boxCap.innerHTML = '<b>' + tombol.getAttribute('data-judul') + '</b><br>' +
                            tombol.getAttribute('data-penerbit') + ' &middot; ' +
                            tombol.getAttribute('data-tanggal');
@@ -382,4 +447,55 @@ var DAFTAR_SERTIFIKAT = [
 
         periksa();
     }
+})();
+
+// ============================================================
+// KARTU AKSES: MIRING MENGIKUTI KURSOR
+// ============================================================
+(function () {
+    var bungkus = document.querySelector('#idc');
+    if (!bungkus) return;
+
+    var kartu = bungkus.querySelector('.idc__in');
+    if (!kartu) return;
+
+    // Hormati pengaturan sistem: kalau pengguna minta animasi dikurangi,
+    // kartunya dibiarkan diam saja.
+    var kurangiGerak = window.matchMedia &&
+                       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (kurangiGerak) return;
+
+    var MIRING = 11;          // derajat maksimal
+    var menunggu = false;
+    var x = 0, y = 0;
+
+    function terapkan() {
+        menunggu = false;
+        // x dan y bernilai -0.5 .. 0.5 relatif tengah kartu
+        kartu.style.setProperty('--ry', (x * MIRING * 2).toFixed(2) + 'deg');
+        kartu.style.setProperty('--rx', (-y * MIRING * 2).toFixed(2) + 'deg');
+        kartu.style.setProperty('--mx', ((x + 0.5) * 100).toFixed(1) + '%');
+        kartu.style.setProperty('--my', ((y + 0.5) * 100).toFixed(1) + '%');
+    }
+
+    bungkus.addEventListener('pointermove', function (e) {
+        var k = kartu.getBoundingClientRect();
+        x = (e.clientX - k.left) / k.width - 0.5;
+        y = (e.clientY - k.top) / k.height - 0.5;
+        bungkus.classList.add('is-aktif');
+        kartu.classList.remove('is-pulang');
+        if (!menunggu) { menunggu = true; requestAnimationFrame(terapkan); }
+    });
+
+    function pulang() {
+        bungkus.classList.remove('is-aktif');
+        kartu.classList.add('is-pulang');
+        kartu.style.setProperty('--rx', '0deg');
+        kartu.style.setProperty('--ry', '0deg');
+    }
+
+    bungkus.addEventListener('pointerleave', pulang);
+    bungkus.addEventListener('pointercancel', pulang);
+    // Di layar sentuh tidak ada pointerleave saat jari diangkat.
+    bungkus.addEventListener('pointerup', pulang);
 })();
