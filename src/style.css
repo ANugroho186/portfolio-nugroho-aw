@@ -167,7 +167,12 @@ img-card {
 /*=============== BREAKPOINTS ===============*/
 /* For small devices */
 @media screen and (max-width: 340px) {
-  .container {
+  /* Dulu aturan ini menyasar .container - sisa dari template kartu blog. Karena
+     .container milik Tailwind lebarnya sudah 100% dan padding 16px, tambahan
+     margin 1rem membuat seluruh isi halaman bergeser 16px ke kanan dan tepi
+     kanannya terpotong di layar <=340px. Diganti ke .container-card yang memang
+     milik template kartu itu. */
+  .container-card {
     margin-inline: 1rem;
   }
 
