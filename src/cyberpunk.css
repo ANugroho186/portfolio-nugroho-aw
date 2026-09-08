@@ -1503,3 +1503,68 @@ html.js-cert .cert-bar {
 @media (prefers-reduced-motion: reduce) {
   .idc__in { transform: none !important; }
 }
+
+/* ===== 28. PENYESUAIAN LAYAR HP =====
+   Semua section memakai pt-36 (144px) dan pb 64-128px. Di desktop itu proporsional,
+   tapi di layar 390px jadi 133-272px ruang kosong di tiap pergantian section -
+   sampai sepertiga layar hanya kekosongan. Nilainya dipangkas di sini, bukan di
+   class Tailwind-nya, supaya tampilan desktop tidak ikut berubah. */
+@media (max-width: 767px) {
+  #home { padding-top: 6.5rem; }
+
+  #about,
+  #portfolio,
+  #journey,
+  #certificate,
+  #blog,
+  #contact { padding-top: 4.5rem; }
+
+  #about { padding-bottom: 4rem; }
+  #portfolio { padding-bottom: 2.5rem; }
+  #journey,
+  #certificate,
+  #blog { padding-bottom: 3rem; }
+  #contact { padding-bottom: 2.5rem; }
+
+  /* Blok judul tiap section (mb-16 = 64px) ikut dirapatkan. */
+  section > .container .mb-16 { margin-bottom: 2.25rem; }
+}
+
+/* Navbar-nya fixed setinggi 84px, jadi tanpa ini judul section selalu
+   tertutup navbar setiap kali menu diklik. */
+section[id] { scroll-margin-top: 5.5rem; }
+
+@media (max-width: 767px) {
+  /* Garis-garis dekoratif di hero diposisikan dengan persen (12%/34%/62% dari
+     lebar section). Di kolom lebar itu terbaca sebagai hiasan; di layar sempit
+     posisinya jatuh menimpa teks dan terlihat seperti garis nyasar. */
+  .cp-bars { display: none; }
+
+}
+
+/* Hero baru jadi dua kolom di >=1024px; di bawah itu teks dan visualnya
+   bertumpuk, jadi jaraknya perlu diperbaiki sampai 1023px - bukan hanya di
+   lebar HP. SVG blok merah di belakang foto dipasang absolute bottom-0 setinggi
+   360px, jadi ujung atasnya naik jauh melewati batas atas fotonya; dengan mt-10
+   (40px) tombol "See more about me" terlihat menempel di atas blok itu. */
+@media (max-width: 1023px) {
+  #home .cp-hud4 { margin-top: 5rem; }
+}
+
+/* SVG bloknya berukuran tetap 360px dan ditempel ke sisi bawah .cp-hud4.
+   Makin sempit layar, makin pendek fotonya, sehingga tonjolan SVG ke atas
+   makin jauh dan menabrak tombol. Dikecilkan di layar sempit. Variabel --tw-*
+   dipakai agar menimpa utility Tailwind tanpa merusak translate-x-nya. */
+@media (max-width: 420px) {
+  #home .cp-hud4 > span {
+    --tw-scale-x: .82;
+    --tw-scale-y: .82;
+  }
+}
+
+@media (max-width: 340px) {
+  #home .cp-hud4 > span {
+    --tw-scale-x: .68;
+    --tw-scale-y: .68;
+  }
+}
