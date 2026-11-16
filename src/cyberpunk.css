@@ -763,306 +763,23 @@ html.js-atas .cp-top.terlihat {
   .cp-top:hover { animation: none; }
 }
 
-/* ===== 23. KARTU PORTFOLIO: bentuk & outline sirkuit =====
-   Bentuknya sengaja dibedakan dari kartu Certificate: kalau Certificate
-   memotong sudut kanan-atas & kiri-bawah, Portfolio memotong kiri-atas &
-   kanan-bawah, ditambah takik trapesium di tengah sisi atas. */
-.pf-item {
-  --pf-potong: 26px;
-  --pf-bar: 90px;   /* panjang bar arsir, wajib kelipatan 10 */
-  --pf-jalur: 40px; /* panjang garis setelah bar */
-  --pf-bentuk: polygon(
-    0 var(--pf-potong),
-    var(--pf-potong) 0,
-    calc(50% - 40px) 0,
-    calc(50% - 30px) 13px,
-    calc(50% + 30px) 13px,
-    calc(50% + 40px) 0,
-    100% 0,
-    100% calc(100% - var(--pf-potong)),
-    calc(100% - var(--pf-potong)) 100%,
-    0 100%
-  );
-  position: relative;
-  isolation: isolate;
-}
-
-/* lapisan outline: bentuk sama, sedikit lebih besar, hanya tepinya yang terlihat */
-.pf-item::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  z-index: 0;
-  clip-path: var(--pf-bentuk);
-  background: linear-gradient(135deg,
-    var(--cp-cyan) 0%,
-    rgba(6, 207, 206, .35) 38%,
-    rgba(252, 238, 10, .55) 72%,
-    var(--cp-yellow) 100%);
-  opacity: .55;
-  transition: opacity .3s ease;
-}
-
-.pf-item:hover::before { opacity: 1; }
-
-.pf-item > .cp-card {
-  clip-path: var(--pf-bentuk);
-  position: relative;
-  z-index: 1;
-}
-
-/* ---- teks kartu ----
-   Judul dulunya putih dan posisinya digeser pakai translate-y persen. Karena
-   yang digeser adalah blok judul+deskripsi, kartu dengan deskripsi panjang
-   (PBO-HGLSA) judulnya terdorong ke tengah kartu, tepat di atas bagian terang
-   gambar, sehingga tidak terbaca.
-
-   Sekarang blok teks diikat ke sisi bawah kartu (bottom), dan deskripsi
-   dikeluarkan dari alur lewat pembungkus setinggi 0. Jadi posisi diam judul
-   selalu sama berapa pun panjang deskripsinya. Warnanya memakai kuning
-   Phantom Liberty dengan bayangan gelap supaya kontras di atas gambar terang
-   maupun overlay merah/hitam saat hover. */
-.pf-teksblok {
-  /* Animasinya transform, bukan `bottom`. Diukur di Chrome: satu kali hover
-     memicu 35 kali layout dengan `bottom`, hanya 2 kali dengan transform.
-     Karena pembungkus ini setinggi kartu, translateY persen selalu
-     menghasilkan jarak yang sama berapa pun panjang judul/deskripsinya. */
-  pointer-events: none;
-}
-
-/* Judul dipasang di atas plat gelap bersudut potong, bukan melayang langsung
-   di atas foto. Garis atas plat memakai cyan yang sama dengan hiasan sirkuit
-   sudut kartu, jadi judul terbaca sebagai bagian dari bingkai kartu - bukan
-   teks yang kebetulan menumpang di atas gambar.
-
-   Latarnya warna solid ber-alpha (bukan gradient) supaya bisa ditransisikan;
-   gradient tidak bisa dianimasikan dan akan meloncat. */
-.pf-judul {
-  display: block;
-  padding: 11px 18px 13px;
-  color: rgba(252, 238, 10, .78);
-  background-color: rgba(11, 11, 16, .5);
-  border-top: 2px solid rgba(0, 240, 255, .42);
-  clip-path: polygon(
-    0 0, 100% 0,
-    100% calc(100% - 12px), calc(100% - 12px) 100%,
-    0 100%);
-  /* Warna teks diredupkan saat diam supaya tidak mengalahkan gambar. Sengaja
-     tidak memakai opacity pada elemen: itu ikut memudarkan platnya sehingga
-     jadi abu-abu kusam di atas gambar yang terang. */
-  transition: color .35s ease, background-color .35s ease, border-color .35s ease;
-  text-shadow: 0 2px 5px rgba(0, 0, 0, .75);
-}
-
-.cp-card:hover .pf-judul,
-.cp-card:focus-within .pf-judul {
-  color: var(--cp-yellow);
-  background-color: rgba(11, 11, 16, .85);
-  border-top-color: var(--cp-yellow);
-}
-
-.pf-teks {
-  text-shadow:
-    0 1px 3px rgba(0, 0, 0, .85),
-    0 0 16px rgba(0, 0, 0, .6);
-}
-
-/* ---- hiasan sirkuit: satu rangkaian yang bersambung ----
-   Alurnya: bevel sudut -> bar arsir -> rel 2px -> garis -> lingkaran terminal.
-   Tiap bagian menempel ke bagian berikutnya sehingga tidak ada ujung yang
-   mengambang, dan semuanya berada di dalam batas kartu supaya aman di lebar
-   berapa pun serta tidak menabrak takik di tengah sisi atas.
-
-   Fase arsir sengaja digeser (transparan 0-3px) supaya tepi kiri & kanan bar
-   selalu jatuh di tengah celah; dengan skew -20deg pergeseran maksimalnya
-   +-1.8px, jadi tidak pernah ada potongan strip separuh di ujung bar. Lebar
-   bar wajib kelipatan 10px agar fase di kedua ujung tetap sama. */
-
-.pf-hatch {
-  position: absolute;
-  z-index: 2;
-  width: var(--pf-bar);
-  height: 12px;
-  overflow: hidden;
-  pointer-events: none;
-  opacity: .85;
-  transition: opacity .3s ease;
-}
-
-.pf-hatch::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: -10px;
-  right: -10px;
-  transform: skewX(-20deg);
-}
-
-.pf-hatch--tl {
-  top: 0;
-  left: var(--pf-potong);
-  border-bottom: 2px solid var(--cp-cyan);
-}
-
-.pf-hatch--tl::before {
-  background: repeating-linear-gradient(to right,
-    transparent 0 3px, var(--cp-cyan) 3px 7px, transparent 7px 10px);
-}
-
-.pf-hatch--br {
-  bottom: 0;
-  right: var(--pf-potong);
-  border-top: 2px solid var(--cp-yellow);
-}
-
-.pf-hatch--br::before {
-  background: repeating-linear-gradient(to right,
-    transparent 0 3px, var(--cp-yellow) 3px 7px, transparent 7px 10px);
-}
-
-/* garis + lingkaran terminal, menyambung dari ujung bar arsir */
-.pf-circuit {
-  position: absolute;
-  z-index: 2;
-  height: 12px;
-  width: calc(var(--pf-jalur) + 11px);
-  pointer-events: none;
-  opacity: .85;
-  transition: opacity .3s ease;
-}
-
-.pf-circuit::before,
-.pf-circuit::after {
-  content: '';
-  position: absolute;
-}
-
-.pf-circuit::after {
-  /* box-sizing: border-box, jadi 9px sudah termasuk border 2px:
-     lubang di tengahnya 5px. */
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: transparent;
-}
-
-.pf-circuit--tl {
-  top: 0;
-  left: calc(var(--pf-potong) + var(--pf-bar));
-}
-
-.pf-circuit--tl::before {
-  left: 0;
-  bottom: 0;
-  width: var(--pf-jalur);
-  height: 2px;
-  background: var(--cp-cyan);
-}
-
-.pf-circuit--tl::after {
-  left: var(--pf-jalur);
-  bottom: -3.5px;
-  border: 2px solid var(--cp-cyan);
-}
-
-.pf-circuit--br {
-  bottom: 0;
-  right: calc(var(--pf-potong) + var(--pf-bar));
-}
-
-.pf-circuit--br::before {
-  right: 0;
-  top: 0;
-  width: var(--pf-jalur);
-  height: 2px;
-  background: var(--cp-yellow);
-}
-
-.pf-circuit--br::after {
-  right: var(--pf-jalur);
-  top: -3.5px;
-  border: 2px solid var(--cp-yellow);
-}
-
-.pf-item:hover .pf-hatch,
-.pf-item:hover .pf-circuit { opacity: 1; }
-
-/* Kartu mobile jauh lebih sempit, jadi rangkaian dipendekkan agar tidak
-   sampai menyentuh takik trapesium di tengah sisi atas. */
-@media (max-width: 640px) {
-  .pf-item {
-    --pf-bar: 50px;
-    --pf-jalur: 24px;
-  }
-}
-
-@media (max-width: 380px) {
-  .pf-item {
-    --pf-bar: 30px;
-    --pf-jalur: 14px;
-  }
-}
+/* ===== 23. KARTU PORTFOLIO (lama) =====
+   Kartu bertakik dengan hiasan sirkuit dan plat judul sudah diganti tata letak
+   "berkas kasus" di blok 32. Nomor blok ini dibiarkan agar penomoran blok
+   lain tidak bergeser. */
 
 /* ===== 23c. HEMAT ANIMASI DI LAYAR KECIL =====
-   Biaya terbesar animasi kartu di HP adalah raster ulang: gambar 1264x900
-   yang diperbesar dan diputar tiap frame, di dalam wadah ber-clip-path. Itu
-   pekerjaan compositor, tidak terukur lewat metrik main-thread, jadi angka
-   pastinya tidak diklaim di sini - tapi di layar sekecil HP zoom-nya nyaris
-   tak terasa sementara biayanya penuh, jadi transform gambar dimatikan.
-
-   Ditambah: fade hiasan sirkuit dimatikan (opacity dibiarkan tetap) dan durasi
-   dipersingkat 500ms -> 300ms, sehingga lebih sedikit frame yang perlu digambar
-   dan terasa lebih responsif untuk sentuhan.
-
-   Umpan balik sentuh tetap ada: overlay menggelap, judul menyala, blok teks
-   naik, deskripsi muncul. */
-@media (max-width: 1023px) {
-  .pf-item .cp-card img {
-    transition: none;
-  }
-
-  .pf-item .cp-card:hover img,
-  .pf-item .cp-card:focus-within img {
-    --tw-rotate: 0deg;
-    --tw-scale-x: 1;
-    --tw-scale-y: 1;
-  }
-
-  .pf-item .pf-hatch,
-  .pf-item .pf-circuit {
-    transition: none;
-  }
-
-  .pf-teksblok,
-  .pf-judul,
-  .pf-teks,
-  .cp-card::after {
-    transition-duration: .3s;
-  }
-}
-
-/* Sapuan scan layar penuh adalah lapisan fixed yang animasinya jalan terus di
+   Sapuan scan layar penuh adalah lapisan fixed yang animasinya jalan terus di
    atas seluruh halaman. Di HP biayanya tidak sebanding dengan efeknya yang
-   nyaris tak terlihat, jadi dimatikan. Scanline statis tetap dipertahankan. */
-/* Di layar paling sempit deskripsi terpanjang nyaris menyentuh dasar kartu.
-   Mengecilkan sedikit ukuran teksnya menghemat satu-dua baris tanpa harus
-   memangkas isinya. */
-@media (max-width: 400px) {
-  .pf-teks {
-    font-size: .8125rem;
-    line-height: 1.45;
-  }
-}
-
+   nyaris tak terlihat, jadi dimatikan. Scanline statis tetap dipertahankan.
+   (Aturan hemat animasi kartu portfolio lama yang dulu ada di sini sudah
+   ikut dihapus bersama kartunya.) */
 @media (max-width: 640px) {
   body::before { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   body::before { display: none; }
-  .pf-teksblok,
-  .pf-item .cp-card img { transition-duration: .01ms; }
 }
 
 /* ===== 24. MENU DROPDOWN MOBILE BERGAYA CYBERPUNK ===== */
@@ -2056,4 +1773,242 @@ html.cp-boot-keluar .cp-boot::after {
    pengguna ini; aturan ini berjaga kalau preferensinya berubah di tengah. */
 @media (prefers-reduced-motion: reduce) {
   html.cp-boot-on .cp-boot { display: none; }
+}
+
+/* ===== 32. PORTFOLIO: BERKAS KASUS =====
+   Pengganti kartu lama (blok 23). Masalah kartu lama: screenshot aplikasi yang
+   putih terang diberi gradasi pink di bawahnya, jadi tiap kartu tampil seperti
+   blok merah muda di atas latar merah gelap, dan judulnya menumpang di plat
+   cokelat transparan.
+
+   Sekarang tiap project satu baris: gambar di satu sisi, keterangan di sisi
+   lain, berselang-seling kiri-kanan (>=768px). Bentuk ini sengaja beda dari
+   Journey (linimasa), Certificate (grid kartu gambar-atas) dan Blog (kartu
+   geser). Gambar diwarnai duotone teal->ungu->pink supaya menyatu dengan
+   latar, dan kembali berwarna asli saat di-hover. Deskripsi selalu terlihat,
+   jadi tidak bergantung hover di layar sentuh. */
+.pf-daftar {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Jarak dirapatkan: deskripsi yang selalu tampil membuat section ini lebih
+   tinggi dari kartu lama (terukur di 390px: 2388px -> ~3350px sebelum
+   dirapatkan). */
+.pf-kasus {
+  position: relative;
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem 0;
+}
+
+/* Garis pemisah tipis yang memudar di kedua ujung. */
+.pf-kasus::before,
+.pf-kasus:last-child::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right,
+    transparent, rgba(0, 240, 255, .3) 20%, rgba(0, 240, 255, .3) 80%, transparent);
+}
+
+.pf-kasus::before { top: 0; }
+.pf-kasus:last-child::after { bottom: 0; }
+
+@media (min-width: 768px) {
+  .pf-kasus {
+    grid-template-columns: 1.2fr 1fr;
+    align-items: center;
+    gap: 2.25rem;
+    padding: 1.75rem 0;
+  }
+
+  /* Baris genap: gambar pindah ke kanan, dan lebar kolomnya ikut ditukar
+     supaya gambar semua baris sama besar. */
+  .pf-kasus:nth-child(even) { grid-template-columns: 1fr 1.2fr; }
+  .pf-kasus:nth-child(even) .pf-bingkai { order: 2; }
+}
+
+@media (min-width: 1024px) {
+  .pf-kasus { gap: 2.75rem; }
+}
+
+/* ---- bingkai: siku HUD di empat sudut, digambar dengan gradient ---- */
+.pf-bingkai {
+  --pf-siku: rgba(0, 240, 255, .7);
+  position: relative;
+  padding: 7px;
+  background:
+    linear-gradient(var(--pf-siku) 0 0) top left     / 22px 2px,
+    linear-gradient(var(--pf-siku) 0 0) top left     / 2px 22px,
+    linear-gradient(var(--pf-siku) 0 0) top right    / 22px 2px,
+    linear-gradient(var(--pf-siku) 0 0) top right    / 2px 22px,
+    linear-gradient(var(--pf-siku) 0 0) bottom left  / 22px 2px,
+    linear-gradient(var(--pf-siku) 0 0) bottom left  / 2px 22px,
+    linear-gradient(var(--pf-siku) 0 0) bottom right / 22px 2px,
+    linear-gradient(var(--pf-siku) 0 0) bottom right / 2px 22px;
+  background-repeat: no-repeat;
+}
+
+/* ---- layar duotone ----
+   Gambar dijadikan abu-abu, lalu dikalikan (multiply) dengan gradasi warna
+   tema: putih menjadi warna gradasi, hitam tetap hitam. Rasio bingkai sama
+   dengan rasio screenshot (+-1,405), jadi gambarnya tampil utuh. */
+.pf-layar {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1400 / 996;
+  background: var(--cp-black);
+  isolation: isolate;
+}
+
+.pf-layar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  filter: grayscale(1) contrast(1.05);
+  transition: filter .4s ease, transform .6s ease;
+}
+
+.pf-layar::before,
+.pf-layar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.pf-layar::before {
+  z-index: 1;
+  background: linear-gradient(135deg, #3fc4d2 0%, #8c4f9e 50%, #e0406a 100%);
+  mix-blend-mode: multiply;
+  transition: opacity .4s ease;
+}
+
+.pf-layar::after {
+  z-index: 2;
+  background:
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, .18) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at 50% 45%, rgba(11, 11, 16, .12) 55%, rgba(11, 11, 16, .5) 100%);
+}
+
+/* ---- keterangan ---- */
+.pf-info {
+  display: flex;
+  flex-direction: column;
+  gap: .625rem;
+  min-width: 0;
+}
+
+.pf-kepala {
+  display: flex;
+  align-items: center;
+  gap: .875rem;
+}
+
+.pf-no {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 800;
+  font-size: 2.25rem;
+  line-height: .85;
+  letter-spacing: -.02em;
+  color: transparent;
+  -webkit-text-stroke: 1.2px rgba(0, 240, 255, .5);
+  transition: -webkit-text-stroke-color .3s ease;
+}
+
+@supports not (-webkit-text-stroke: 1px) {
+  .pf-no { color: rgba(0, 240, 255, .5); }
+}
+
+.pf-label {
+  margin: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--cp-yellow);
+}
+
+.pf-judul {
+  margin: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 1.125rem;
+  line-height: 1.3;
+  color: #ececed;
+  transition: color .25s ease;
+}
+
+.pf-teks {
+  margin: 0;
+  font-size: .875rem;
+  line-height: 1.55;
+  color: rgba(236, 236, 237, .76);
+}
+
+.pf-tag {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin: .125rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pf-tag li {
+  padding: 3px 9px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .6875rem;
+  letter-spacing: .06em;
+  color: var(--cp-cyan);
+  background: rgba(0, 240, 255, .05);
+  border: 1px solid rgba(0, 240, 255, .35);
+}
+
+@media (min-width: 768px) {
+  /* Di dua kolom nomornya besar dan berdiri sendiri di atas label. */
+  .pf-kepala {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .75rem;
+  }
+
+  .pf-info { gap: .875rem; }
+  .pf-no { font-size: 4.5rem; }
+  .pf-teks { font-size: .9375rem; line-height: 1.6; }
+}
+
+@media (min-width: 1024px) {
+  .pf-judul { font-size: 1.375rem; }
+}
+
+/* ---- interaksi ----
+   Hanya untuk perangkat yang benar-benar bisa hover. Di layar sentuh :hover
+   menempel setelah diketuk, jadi gambarnya dibuat setengah berwarna permanen
+   supaya isi screenshot tetap bisa dikenali tanpa interaksi. */
+@media (hover: hover) {
+  .pf-kasus:hover .pf-bingkai { --pf-siku: var(--cp-yellow); }
+  .pf-kasus:hover .pf-layar img { filter: none; transform: scale(1.03); }
+  .pf-kasus:hover .pf-layar::before { opacity: 0; }
+  .pf-kasus:hover .pf-judul { color: var(--cp-yellow); }
+  .pf-kasus:hover .pf-no { -webkit-text-stroke-color: rgba(252, 238, 10, .75); }
+}
+
+@media (hover: none) {
+  .pf-layar img { filter: grayscale(.35); }
+  .pf-layar::before { opacity: .55; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-layar img,
+  .pf-layar::before,
+  .pf-judul,
+  .pf-no { transition: none; }
+
+  .pf-kasus:hover .pf-layar img { transform: none; }
 }
