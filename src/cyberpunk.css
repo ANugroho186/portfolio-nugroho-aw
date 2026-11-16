@@ -1568,3 +1568,127 @@ section[id] { scroll-margin-top: 5.5rem; }
     --tw-scale-y: .68;
   }
 }
+
+/* ===== 29. LOGO [NAW] 3D: EKSTRUSI NEON =====
+   Kedalaman hurufnya dibangun dari tumpukan text-shadow tanpa blur, satu langkah
+   per --t: cyan yang makin gelap, lalu bibir merah di lapisan paling belakang.
+   --t sengaja dibuat variabel supaya logo yang sama bisa dipakai besar (misalnya
+   di layar pembuka) cukup dengan menaikkan --t, tanpa menulis ulang bayangannya.
+
+   Logo ini sengaja TIDAK memakai .cp-glitch: keyframes cp-glitch-shift menimpa
+   text-shadow dan transform, sehingga saat hover ekstrusi dan kemiringannya
+   hilang. Glitch hover-nya memakai lapisan sobek sendiri (lihat di bawah). */
+.cp-logo {
+  --t: 1px;
+  font-family: 'Orbitron', 'JetBrains Mono', monospace;
+  font-weight: 900;
+  letter-spacing: .02em;
+}
+
+.cp-logo__badan {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  transform: skewX(-9deg);
+}
+
+.cp-logo__inti {
+  position: relative;
+  display: inline-block;
+  color: var(--cp-cyan);
+  text-shadow:
+    calc(var(--t) * 1) calc(var(--t) * 1) 0 #00bfcc,
+    calc(var(--t) * 2) calc(var(--t) * 2) 0 #0a95a2,
+    calc(var(--t) * 3) calc(var(--t) * 3) 0 #0c6d7e,
+    calc(var(--t) * 4) calc(var(--t) * 4) 0 #19475f,
+    calc(var(--t) * 5) calc(var(--t) * 5) 0 var(--cp-red),
+    calc(var(--t) * 6) calc(var(--t) * 6) 0 #6F0721,
+    0 0 calc(var(--t) * 16) rgba(0, 240, 255, .45);
+}
+
+/* Kilap krom: separuh atas muka huruf dibuat lebih terang. Salinan teksnya
+   ditumpuk tepat di atas aslinya lalu dipotong clip-path. */
+.cp-logo__inti::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #c8fdff;
+  text-shadow: none;
+  clip-path: inset(0 0 54% 0);
+  pointer-events: none;
+}
+
+/* Kurung siku Orbitron di bobot 900 nyaris berupa batang lurus tanpa kait;
+   setelah diberi ekstrusi, "[NAW]" terbaca seperti "INAWI". Kurungnya memakai
+   JetBrains Mono, sama dengan kurung di judul-judul section lain. */
+.cp-logo__kurung {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 800;
+  color: var(--cp-red);
+  text-shadow:
+    calc(var(--t) * 1) calc(var(--t) * 1) 0 #b0062f,
+    calc(var(--t) * 2) calc(var(--t) * 2) 0 #8a0526,
+    calc(var(--t) * 3) calc(var(--t) * 3) 0 #6F0721,
+    calc(var(--t) * 4) calc(var(--t) * 4) 0 #3a0312,
+    0 0 calc(var(--t) * 14) rgba(229, 9, 63, .5);
+}
+
+/* Lapisan sobek untuk glitch hover - butuh data-text="[NAW]" di .cp-logo__badan.
+   Hanya di perangkat yang benar-benar bisa hover: di layar sentuh, :hover
+   "menempel" setelah diketuk dan logonya akan terus bergetar. */
+.cp-logo__badan::before,
+.cp-logo__badan::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  opacity: 0;
+  text-shadow: none;
+  pointer-events: none;
+}
+
+.cp-logo__badan::before { color: var(--cp-cyan); clip-path: inset(14% 0 58% 0); }
+.cp-logo__badan::after  { color: var(--cp-pink); clip-path: inset(60% 0 14% 0); }
+
+@media (hover: hover) {
+  .cp-logo:hover .cp-logo__badan { animation: cp-logo-guncang .32s steps(2) infinite; }
+
+  .cp-logo:hover .cp-logo__badan::before {
+    opacity: .9;
+    animation: cp-tear-a .4s steps(2) infinite;
+  }
+
+  .cp-logo:hover .cp-logo__badan::after {
+    opacity: .9;
+    animation: cp-tear-b .4s steps(2) infinite;
+  }
+}
+
+/* Getaran hanya lewat transform; kemiringan -9deg harus ikut ditulis di tiap
+   keyframe karena animasi transform menimpa nilai dasarnya. */
+@keyframes cp-logo-guncang {
+  0%, 100% { transform: skewX(-9deg) translate(0, 0); }
+  33%      { transform: skewX(-9deg) translate(1px, -1px); }
+  66%      { transform: skewX(-9deg) translate(-1px, 1px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cp-logo:hover .cp-logo__badan { animation: none; }
+
+  .cp-logo:hover .cp-logo__badan::before,
+  .cp-logo:hover .cp-logo__badan::after { animation: none; opacity: 0; }
+}
+
+/* ===== 30. NAVBAR DESKTOP SEMPIT (1024-1279px) =====
+   Di rentang ini .container mentok di 1024px, sedangkan 7 tautan navbar dengan
+   mx-8 (32px kiri-kanan) saja sudah selebar ~900px. Ditambah logo, isinya lebih
+   lebar dari layar; karena html/body memakai overflow-x:hidden (blok 15),
+   tautan "Contact" terpotong diam-diam alih-alih memunculkan scrollbar.
+   Terukur di 1024px: meluber 55px dengan logo lama, 89px dengan logo 3D.
+   Jarak tautan dirapatkan hanya di rentang ini; desktop lebar tetap mx-8. */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  #nav-menu .cp-nav { margin-inline: 1.25rem; }
+}
