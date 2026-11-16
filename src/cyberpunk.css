@@ -1412,11 +1412,13 @@ section[id] { scroll-margin-top: 5.5rem; }
 
 /* ===== 31. LAYAR PEMBUKA: BOOT LOG + LOGO [NAW] =====
    Hanya tampil kalau <html> punya cp-boot-on. Kelas itu dipasang skrip kecil di
-   <head>: sekali per sesi tab (sessionStorage), tidak pernah untuk pengguna
-   prefers-reduced-motion, dan tidak untuk tab yang dibuka di latar belakang.
-   Tanpa JavaScript, layar ini tidak pernah muncul.
+   <head>: sekali per sesi tab (sessionStorage) dan tidak pernah untuk pengguna
+   prefers-reduced-motion. Tanpa JavaScript, layar ini tidak pernah muncul.
 
    Urutan kelas di <html>, diatur src/js/boot.js:
+     cp-boot-tunggu  (hanya kalau halaman dimuat selagi tak terlihat: tab latar
+                     belakang atau prerender browser) layar hitam sudah menutup,
+                     menunggu halaman tampil
      cp-boot-on      layar hitam menutup halaman; animasi belum mulai
      cp-boot-jalan   font logo siap -> garis CRT, log, batang muat, logo glitch
      cp-boot-keluar  isi layar padam ala CRT, dua panel latar membelah
@@ -1454,6 +1456,12 @@ html.cp-boot-on .cp-boot {
 }
 
 @keyframes cp-boot-darurat { to { visibility: hidden; } }
+
+/* Selagi menunggu halaman tampil, jaring pengaman belum boleh dihitung: jam
+   animasi tetap berjalan di tab tersembunyi, jadi tanpa ini layar pembuka bisa
+   sudah "kedaluwarsa" sebelum sempat terlihat. Begitu kelasnya dilepas,
+   animasinya mulai dari nol. */
+html.cp-boot-tunggu .cp-boot { animation: none; }
 
 /* Begitu mulai keluar, klik langsung tembus ke halaman. */
 html.cp-boot-keluar .cp-boot { pointer-events: none; }

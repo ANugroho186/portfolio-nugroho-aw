@@ -13,14 +13,30 @@
     <link rel="stylesheet" href="src/cyberpunk.css">
     <script>document.documentElement.classList.add('cp-reveal-on');</script>
     <script>
-        // Layar pembuka: sekali per sesi tab, tidak untuk prefers-reduced-motion
-        // maupun tab yang dibuka di latar belakang. Waktunya diatur src/js/boot.js.
+        // Layar pembuka: sekali per sesi tab, tidak untuk prefers-reduced-motion.
+        // Halaman yang dimuat selagi tak terlihat - tab latar belakang, atau dimuat
+        // duluan oleh browser (prerender) ketika alamatnya sedang diketik - tetap
+        // mendapat layar pembuka, tapi ditahan (cp-boot-tunggu) sampai halaman
+        // benar-benar tampil. Waktunya diatur src/js/boot.js.
         (function () {
             try {
-                if (sessionStorage.getItem('naw-boot') || document.visibilityState === 'hidden' ||
+                if (sessionStorage.getItem('naw-boot') ||
                     matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-                sessionStorage.setItem('naw-boot', '1');
-                document.documentElement.classList.add('cp-boot-on');
+                var root = document.documentElement;
+                var mulai = function () {
+                    if (document.visibilityState !== 'visible' || document.prerendering) return false;
+                    root.classList.remove('cp-boot-tunggu');
+                    document.removeEventListener('visibilitychange', mulai);
+                    document.removeEventListener('prerenderingchange', mulai);
+                    try { sessionStorage.setItem('naw-boot', '1'); } catch (e) {}
+                    return true;
+                };
+                root.classList.add('cp-boot-on');
+                if (!mulai()) {
+                    root.classList.add('cp-boot-tunggu');
+                    document.addEventListener('visibilitychange', mulai);
+                    document.addEventListener('prerenderingchange', mulai);
+                }
             } catch (e) {}
         })();
     </script>
