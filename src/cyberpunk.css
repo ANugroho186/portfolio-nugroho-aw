@@ -2020,3 +2020,68 @@ html.cp-boot-keluar .cp-boot::after {
 
   .pf-kasus:hover .pf-layar img { transform: none; }
 }
+
+/* ===== 33. PORTFOLIO: TOMBOL TAUTAN =====
+   Tautan keluar tiap project, di bawah tag. Hanya dipasang kalau tautannya
+   memang ada, dan labelnya menyebut tujuannya (GitHub / Figma / Paper) supaya
+   pengunjung tahu ke mana dibawa sebelum mengeklik. Sengaja kuning dan lebih
+   tinggi dari tag cyan, supaya terbaca sebagai tombol, bukan label.
+   Tidak memakai clip-path: clip-path ikut memotong outline fokus keyboard. */
+.pf-aksi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .625rem;
+  margin-top: .25rem;
+}
+
+.pf-tombol {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  min-height: 2.5rem;
+  padding: 0 1rem 0 .875rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: .75rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--cp-yellow);
+  background: rgba(252, 238, 10, .06);
+  border: 1px solid rgba(252, 238, 10, .55);
+  border-left-width: 3px;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+.pf-panah {
+  width: .625rem;
+  height: .625rem;
+  flex: none;
+  transition: transform .2s ease;
+}
+
+.pf-tombol:focus-visible {
+  outline: 2px solid var(--cp-cyan);
+  outline-offset: 3px;
+}
+
+.pf-tombol:active {
+  color: var(--cp-black);
+  background: var(--cp-yellow);
+}
+
+@media (hover: hover) {
+  .pf-tombol:hover {
+    color: var(--cp-black);
+    background: var(--cp-yellow);
+  }
+
+  .pf-tombol:hover .pf-panah { transform: translate(2px, -2px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-tombol,
+  .pf-panah { transition: none; }
+
+  .pf-tombol:hover .pf-panah { transform: none; }
+}
