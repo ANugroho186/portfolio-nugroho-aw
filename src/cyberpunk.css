@@ -1412,8 +1412,8 @@ section[id] { scroll-margin-top: 5.5rem; }
 
 /* ===== 31. LAYAR PEMBUKA: BOOT LOG + LOGO [NAW] =====
    Hanya tampil kalau <html> punya cp-boot-on. Kelas itu dipasang skrip kecil di
-   <head>: sekali per sesi tab (sessionStorage) dan tidak pernah untuk pengguna
-   prefers-reduced-motion. Tanpa JavaScript, layar ini tidak pernah muncul.
+   <head>: setiap kali halaman dimuat (termasuk refresh) dan tidak pernah untuk
+   pengguna prefers-reduced-motion. Tanpa JavaScript, layar ini tidak pernah muncul.
 
    Urutan kelas di <html>, diatur src/js/boot.js:
      cp-boot-tunggu  (hanya kalau halaman dimuat selagi tak terlihat: tab latar

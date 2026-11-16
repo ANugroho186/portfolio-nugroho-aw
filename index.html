@@ -13,22 +13,28 @@
     <link rel="stylesheet" href="src/cyberpunk.css">
     <script>document.documentElement.classList.add('cp-reveal-on');</script>
     <script>
-        // Layar pembuka: sekali per sesi tab, tidak untuk prefers-reduced-motion.
-        // Halaman yang dimuat selagi tak terlihat - tab latar belakang, atau dimuat
-        // duluan oleh browser (prerender) ketika alamatnya sedang diketik - tetap
-        // mendapat layar pembuka, tapi ditahan (cp-boot-tunggu) sampai halaman
-        // benar-benar tampil. Waktunya diatur src/js/boot.js.
+        // Pemulihan scroll bawaan browser dimatikan; gantinya di src/js/script.js
+        // (blok POSISI SCROLL). Bawaannya terukur sering melempar ke paling atas
+        // kalau refresh dilakukan dari section Certificate ke bawah.
+        try { history.scrollRestoration = 'manual'; } catch (e) {}
+    </script>
+    <script>
+        // Layar pembuka: diputar setiap kali halaman dimuat, termasuk refresh, kecuali
+        // untuk prefers-reduced-motion. Setelah refresh, posisi scroll dipulihkan di balik
+        // layar ini (blok POSISI SCROLL di src/js/script.js), jadi begitu layar pembuka
+        // hilang pengunjung tetap di bagian yang sama.
+        // Halaman yang dimuat selagi tak terlihat (tab latar belakang, atau dimuat duluan
+        // oleh browser ketika alamatnya sedang diketik) ditahan dengan cp-boot-tunggu
+        // sampai benar-benar tampil. Waktunya diatur src/js/boot.js.
         (function () {
             try {
-                if (sessionStorage.getItem('naw-boot') ||
-                    matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
                 var root = document.documentElement;
                 var mulai = function () {
                     if (document.visibilityState !== 'visible' || document.prerendering) return false;
                     root.classList.remove('cp-boot-tunggu');
                     document.removeEventListener('visibilitychange', mulai);
                     document.removeEventListener('prerenderingchange', mulai);
-                    try { sessionStorage.setItem('naw-boot', '1'); } catch (e) {}
                     return true;
                 };
                 root.classList.add('cp-boot-on');

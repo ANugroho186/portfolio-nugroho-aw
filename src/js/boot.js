@@ -1,8 +1,8 @@
 // ============================================================
 // LAYAR PEMBUKA: boot log + logo [NAW]
 //
-// Tampil atau tidaknya diputuskan skrip kecil di <head> (sekali per sesi
-// tab, tidak untuk prefers-reduced-motion) dengan memasang cp-boot-on di
+// Tampil atau tidaknya diputuskan skrip kecil di <head> (setiap kali halaman
+// dimuat, tidak untuk prefers-reduced-motion) dengan memasang cp-boot-on di
 // <html>. File ini hanya mengatur waktunya; animasinya di CSS blok 31.
 //   0. kalau ada cp-boot-tunggu (halaman dimuat selagi tak terlihat), tunggu
 //      sampai skrip <head> melepasnya, yaitu saat halaman benar-benar tampil;

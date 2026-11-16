@@ -499,3 +499,75 @@ var DAFTAR_SERTIFIKAT = [
     // Di layar sentuh tidak ada pointerleave saat jari diangkat.
     bungkus.addEventListener('pointerup', pulang);
 })();
+
+// ============================================================
+// POSISI SCROLL SETELAH REFRESH
+// Pemulihan bawaan browser dimatikan di <head> (scrollRestoration = 'manual')
+// karena tidak bisa diandalkan di halaman ini: terukur, refresh dari section
+// Certificate ke bawah sering kembali ke paling atas. Gantinya: saat halaman
+// ditinggalkan, simpan section yang sedang di tepi atas layar beserta jaraknya,
+// lalu setelah refresh (atau kembali lewat Back) gulir ke sana lagi. Disimpan
+// per section, bukan angka piksel mentah, supaya tetap tepat walau tinggi
+// bagian di atasnya berubah. Terjadi di balik layar pembuka, jadi tidak
+// terlihat melompat.
+// ============================================================
+(function () {
+    var KUNCI = 'naw-posisi';
+    var root = document.documentElement;
+
+    // Section terakhir yang tepi atasnya sudah melewati tepi atas layar.
+    function sectionDiAtas() {
+        var semua = document.querySelectorAll('section[id]'), pilih = null;
+        for (var i = 0; i < semua.length; i++) {
+            if (semua[i].getBoundingClientRect().top <= 1) pilih = semua[i];
+        }
+        return pilih;
+    }
+
+    window.addEventListener('pagehide', function () {
+        try {
+            var sec = sectionDiAtas();
+            sessionStorage.setItem(KUNCI, JSON.stringify({
+                alamat: location.pathname,
+                id: sec ? sec.id : '',
+                jarak: sec ? Math.round(-sec.getBoundingClientRect().top) : 0,
+                y: Math.round(window.pageYOffset)
+            }));
+        } catch (e) {}
+    });
+
+    var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+    var jenis = nav ? nav.type :
+        (performance.navigation && ['navigate', 'reload', 'back_forward'][performance.navigation.type]);
+    if (jenis !== 'reload' && jenis !== 'back_forward') return;
+
+    var simpanan = null;
+    try { simpanan = JSON.parse(sessionStorage.getItem(KUNCI)); } catch (e) {}
+    if (!simpanan || simpanan.alamat !== location.pathname) return;
+
+    // Begitu pengunjung bergerak sendiri (roda, sentuh, tombol, klik termasuk
+    // scrollbar dan menu), jangan ditarik balik. Batas waktu menjaga kasus
+    // 'load' yang telat karena gambar luar lambat: tanpa ini, pengunjung yang
+    // sudah menggulir lewat cara lain bisa dilempar balik belasan detik kemudian.
+    var BATAS_WAKTU = 4000;   // ms sejak navigasi dimulai
+    var dibatalkan = false;
+    function batal() { dibatalkan = true; }
+    ['wheel', 'touchmove', 'keydown', 'pointerdown', 'mousedown'].forEach(function (p) {
+        window.addEventListener(p, batal, { passive: true, capture: true, once: true });
+    });
+
+    function pulihkan() {
+        if (dibatalkan || performance.now() > BATAS_WAKTU) return;
+        var sec = simpanan.id && document.getElementById(simpanan.id);
+        var y = sec ? sec.getBoundingClientRect().top + window.pageYOffset + simpanan.jarak : simpanan.y;
+        var semula = root.style.scrollBehavior;
+        root.style.scrollBehavior = 'auto';   // <html> memakai scroll-smooth; pemulihan harus instan
+        window.scrollTo(0, Math.round(y));
+        root.style.scrollBehavior = semula;
+    }
+
+    // Dijalankan di DOMContentLoaded lalu diulang di load: lompatan ke #hash
+    // bawaan browser dan gambar yang baru termuat bisa menggeser posisinya.
+    document.addEventListener('DOMContentLoaded', pulihkan);
+    window.addEventListener('load', pulihkan);
+})();
