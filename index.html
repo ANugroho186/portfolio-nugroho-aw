@@ -12,6 +12,18 @@
     <link rel="stylesheet" href="src/style.css">
     <link rel="stylesheet" href="src/cyberpunk.css">
     <script>document.documentElement.classList.add('cp-reveal-on');</script>
+    <script>
+        // Layar pembuka: sekali per sesi tab, tidak untuk prefers-reduced-motion
+        // maupun tab yang dibuka di latar belakang. Waktunya diatur src/js/boot.js.
+        (function () {
+            try {
+                if (sessionStorage.getItem('naw-boot') || document.visibilityState === 'hidden' ||
+                    matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                sessionStorage.setItem('naw-boot', '1');
+                document.documentElement.classList.add('cp-boot-on');
+            } catch (e) {}
+        })();
+    </script>
     <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <meta name="description" content="Portfolio of Nugroho Agung Wibisono, Informatics Engineering student at Universitas Mercu Buana - software development, system analysis, UML modeling, and UI/UX design.">
@@ -33,6 +45,22 @@
 
 </head>
 <body class="bg-darkblack">
+    <!-- Layar pembuka: tersembunyi kecuali <html> punya cp-boot-on (lihat skrip di <head>) -->
+    <div id="cp-boot" class="cp-boot" aria-hidden="true">
+        <span class="cp-boot__garis"></span>
+        <div class="cp-boot__layar">
+            <div class="cp-boot__log">
+                <p class="cp-boot__baris"><span class="cp-boot__prompt">&gt;</span>NAW//OS<span class="cp-boot__redup">cold boot</span></p>
+                <p class="cp-boot__baris"><span class="cp-boot__prompt">&gt;</span>mounting /portfolio<span class="cp-boot__titik"></span><b>OK</b></p>
+                <p class="cp-boot__baris"><span class="cp-boot__prompt">&gt;</span>linking interface<span class="cp-boot__titik"></span><b>OK</b></p>
+                <p class="cp-boot__baris"><span class="cp-boot__prompt">&gt;</span>loading identity<span class="cp-boot__titik"></span><b>OK</b></p>
+            </div>
+            <div class="cp-logo cp-boot__logo"><span class="cp-logo__badan" data-text="[NAW]"><span class="cp-logo__kurung">[</span><span class="cp-logo__inti" data-text="NAW">NAW</span><span class="cp-logo__kurung">]</span></span></div>
+            <div class="cp-boot__muat"><span class="cp-boot__batang"><i></i></span><span class="cp-boot__persen"></span></div>
+        </div>
+        <p class="cp-boot__lewati"><span class="cp-boot__lewati-klik">Click or press any key to skip</span><span class="cp-boot__lewati-sentuh">Tap to skip</span></p>
+    </div>
+
     <!-- Filter pemisah kanal warna untuk efek glitch pada foto profil -->
     <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
         <filter id="cp-chan-r" color-interpolation-filters="sRGB">
@@ -757,6 +785,7 @@
     </svg>
 </a>
 
+<script src="src/js/boot.js"></script>
 <script src="src/js/script.js"></script>
 <script src="src/js/holo-geo.js"></script>
 <script src="src/js/hologram.js"></script>

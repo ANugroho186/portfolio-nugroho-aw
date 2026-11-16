@@ -1571,15 +1571,15 @@ section[id] { scroll-margin-top: 5.5rem; }
 
 /* ===== 29. LOGO [NAW] 3D: EKSTRUSI NEON =====
    Kedalaman hurufnya dibangun dari tumpukan text-shadow tanpa blur, satu langkah
-   per --t: cyan yang makin gelap, lalu bibir merah di lapisan paling belakang.
-   --t sengaja dibuat variabel supaya logo yang sama bisa dipakai besar (misalnya
-   di layar pembuka) cukup dengan menaikkan --t, tanpa menulis ulang bayangannya.
+   per --logo-tebal: cyan yang makin gelap, lalu bibir merah di lapisan paling belakang.
+   --logo-tebal sengaja dibuat variabel supaya logo yang sama bisa dipakai besar (misalnya
+   di layar pembuka) cukup dengan menaikkan --logo-tebal, tanpa menulis ulang bayangannya.
 
    Logo ini sengaja TIDAK memakai .cp-glitch: keyframes cp-glitch-shift menimpa
    text-shadow dan transform, sehingga saat hover ekstrusi dan kemiringannya
    hilang. Glitch hover-nya memakai lapisan sobek sendiri (lihat di bawah). */
 .cp-logo {
-  --t: 1px;
+  --logo-tebal: 1px;
   font-family: 'Orbitron', 'JetBrains Mono', monospace;
   font-weight: 900;
   letter-spacing: .02em;
@@ -1597,13 +1597,13 @@ section[id] { scroll-margin-top: 5.5rem; }
   display: inline-block;
   color: var(--cp-cyan);
   text-shadow:
-    calc(var(--t) * 1) calc(var(--t) * 1) 0 #00bfcc,
-    calc(var(--t) * 2) calc(var(--t) * 2) 0 #0a95a2,
-    calc(var(--t) * 3) calc(var(--t) * 3) 0 #0c6d7e,
-    calc(var(--t) * 4) calc(var(--t) * 4) 0 #19475f,
-    calc(var(--t) * 5) calc(var(--t) * 5) 0 var(--cp-red),
-    calc(var(--t) * 6) calc(var(--t) * 6) 0 #6F0721,
-    0 0 calc(var(--t) * 16) rgba(0, 240, 255, .45);
+    calc(var(--logo-tebal) * 1) calc(var(--logo-tebal) * 1) 0 #00bfcc,
+    calc(var(--logo-tebal) * 2) calc(var(--logo-tebal) * 2) 0 #0a95a2,
+    calc(var(--logo-tebal) * 3) calc(var(--logo-tebal) * 3) 0 #0c6d7e,
+    calc(var(--logo-tebal) * 4) calc(var(--logo-tebal) * 4) 0 #19475f,
+    calc(var(--logo-tebal) * 5) calc(var(--logo-tebal) * 5) 0 var(--cp-red),
+    calc(var(--logo-tebal) * 6) calc(var(--logo-tebal) * 6) 0 #6F0721,
+    0 0 calc(var(--logo-tebal) * 16) rgba(0, 240, 255, .45);
 }
 
 /* Kilap krom: separuh atas muka huruf dibuat lebih terang. Salinan teksnya
@@ -1628,11 +1628,11 @@ section[id] { scroll-margin-top: 5.5rem; }
   font-weight: 800;
   color: var(--cp-red);
   text-shadow:
-    calc(var(--t) * 1) calc(var(--t) * 1) 0 #b0062f,
-    calc(var(--t) * 2) calc(var(--t) * 2) 0 #8a0526,
-    calc(var(--t) * 3) calc(var(--t) * 3) 0 #6F0721,
-    calc(var(--t) * 4) calc(var(--t) * 4) 0 #3a0312,
-    0 0 calc(var(--t) * 14) rgba(229, 9, 63, .5);
+    calc(var(--logo-tebal) * 1) calc(var(--logo-tebal) * 1) 0 #b0062f,
+    calc(var(--logo-tebal) * 2) calc(var(--logo-tebal) * 2) 0 #8a0526,
+    calc(var(--logo-tebal) * 3) calc(var(--logo-tebal) * 3) 0 #6F0721,
+    calc(var(--logo-tebal) * 4) calc(var(--logo-tebal) * 4) 0 #3a0312,
+    0 0 calc(var(--logo-tebal) * 14) rgba(229, 9, 63, .5);
 }
 
 /* Lapisan sobek untuk glitch hover - butuh data-text="[NAW]" di .cp-logo__badan.
@@ -1691,4 +1691,369 @@ section[id] { scroll-margin-top: 5.5rem; }
    Jarak tautan dirapatkan hanya di rentang ini; desktop lebar tetap mx-8. */
 @media (min-width: 1024px) and (max-width: 1279px) {
   #nav-menu .cp-nav { margin-inline: 1.25rem; }
+}
+
+/* ===== 31. LAYAR PEMBUKA: BOOT LOG + LOGO [NAW] =====
+   Hanya tampil kalau <html> punya cp-boot-on. Kelas itu dipasang skrip kecil di
+   <head>: sekali per sesi tab (sessionStorage), tidak pernah untuk pengguna
+   prefers-reduced-motion, dan tidak untuk tab yang dibuka di latar belakang.
+   Tanpa JavaScript, layar ini tidak pernah muncul.
+
+   Urutan kelas di <html>, diatur src/js/boot.js:
+     cp-boot-on      layar hitam menutup halaman; animasi belum mulai
+     cp-boot-jalan   font logo siap -> garis CRT, log, batang muat, logo glitch
+     cp-boot-keluar  isi layar padam ala CRT, dua panel latar membelah
+   Semua gerakan memakai transform / opacity / clip-path - tidak ada layout. */
+
+/* Didaftarkan supaya bisa dianimasikan halus: ketebalan ekstrusi logo
+   tumbuh dari 0, dan angka persen di batang muat menghitung naik. */
+@property --logo-tebal {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 1px;
+}
+
+@property --boot-persen {
+  syntax: '<integer>';
+  inherits: false;
+  initial-value: 0;
+}
+
+.cp-boot { display: none; }
+
+html.cp-boot-on .cp-boot {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;   /* di atas navbar (9999) dan lightbox sertifikat (10000) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: var(--cp-cyan);
+  font-family: 'JetBrains Mono', monospace;
+  /* Jaring pengaman: kalau boot.js gagal jalan, layar ini tetap menghilang
+     sendiri setelah 7 detik dan tidak mengurung pengunjung. */
+  animation: cp-boot-darurat 0s linear 7s forwards;
+}
+
+@keyframes cp-boot-darurat { to { visibility: hidden; } }
+
+/* Begitu mulai keluar, klik langsung tembus ke halaman. */
+html.cp-boot-keluar .cp-boot { pointer-events: none; }
+
+/* Latarnya dua panel - separuh atas dan bawah - supaya saat keluar bisa
+   membelah hanya dengan transform. +1px agar tidak ada celah di tengah.
+   Vinyet dan scanline digambar setinggi layar lalu dipotong per panel. */
+html.cp-boot-on .cp-boot::before,
+html.cp-boot-on .cp-boot::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: calc(50% + 1px);
+  background:
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, .28) 0 1px, transparent 1px 4px),
+    radial-gradient(ellipse 75% 60% at 50% 50%, #15151f 0%, var(--cp-black) 70%);
+  background-size: auto, 100% 100vh;
+}
+
+html.cp-boot-on .cp-boot::before { top: 0;    background-position: 0 0, top; }
+html.cp-boot-on .cp-boot::after  { bottom: 0; background-position: 0 0, bottom; }
+
+/* ---- garis CRT: muncul di tengah, melebar, lalu meledak jadi layar ---- */
+.cp-boot__garis {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  z-index: 2;
+  height: 2px;
+  margin-top: -1px;
+  background: #e8feff;
+  box-shadow: 0 0 12px 2px rgba(0, 240, 255, .8);
+  opacity: 0;
+  transform: scaleX(0);
+  pointer-events: none;
+}
+
+html.cp-boot-jalan .cp-boot__garis {
+  animation: cp-boot-garis-nyala .5s cubic-bezier(.2, .8, .2, 1) forwards;
+}
+
+@keyframes cp-boot-garis-nyala {
+  0%   { opacity: 1; transform: scaleX(0); }
+  45%  { opacity: 1; transform: scaleX(1); }
+  100% { opacity: 0; transform: scaleX(1) scaleY(40); }
+}
+
+/* ---- isi layar ---- */
+.cp-boot__layar {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  width: min(30rem, 100% - 2.5rem);
+  opacity: 0;
+}
+
+html.cp-boot-jalan .cp-boot__layar {
+  animation: cp-boot-layar-nyala .3s .2s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+@keyframes cp-boot-layar-nyala {
+  from { opacity: 0; transform: scaleY(.02); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (max-height: 420px) {
+  .cp-boot__layar { gap: 1rem; }
+}
+
+/* Baris log "diketik" dengan membuka clip-path dari kiri ke kanan. */
+.cp-boot__log {
+  font-size: .8125rem;
+  line-height: 1.75;
+  color: rgba(0, 240, 255, .8);
+}
+
+.cp-boot__baris {
+  display: flex;
+  align-items: baseline;
+  gap: .6ch;
+  margin: 0;
+  white-space: nowrap;
+  clip-path: inset(0 100% 0 0);
+}
+
+.cp-boot__prompt { color: var(--cp-red); }
+.cp-boot__redup  { color: rgba(0, 240, 255, .45); }
+.cp-boot__baris b { color: var(--cp-yellow); font-weight: 700; }
+
+.cp-boot__titik {
+  flex: 1;
+  min-width: 2ch;
+  border-bottom: 2px dotted rgba(0, 240, 255, .35);
+  transform: translateY(-.3em);
+}
+
+html.cp-boot-jalan .cp-boot__baris {
+  animation: cp-boot-ketik .32s steps(16) forwards;
+}
+
+html.cp-boot-jalan .cp-boot__baris:nth-child(1) { animation-delay: .45s; }
+html.cp-boot-jalan .cp-boot__baris:nth-child(2) { animation-delay: .7s; }
+html.cp-boot-jalan .cp-boot__baris:nth-child(3) { animation-delay: .95s; }
+html.cp-boot-jalan .cp-boot__baris:nth-child(4) { animation-delay: 1.2s; }
+
+@keyframes cp-boot-ketik { to { clip-path: inset(0 0 0 0); } }
+
+/* ---- logo: berkedip masuk dengan sobekan RGB, lalu ekstrusinya tumbuh ----
+   pointer-events: none supaya aturan :hover logo navbar (blok 29) tidak ikut
+   menyala kalau kursor kebetulan berada di atas logo ini.
+   Ukurannya ikut dibatasi tinggi layar (20vh): di HP landscape 640x360,
+   15vw saja menghasilkan logo 96px dan petunjuk "skip" menempel ke batang muat. */
+.cp-boot__logo {
+  --logo-tebal: 3px;
+  font-size: clamp(2.75rem, min(15vw, 20vh), 6rem);
+  line-height: 1.2;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+}
+
+html.cp-boot-jalan .cp-boot__logo {
+  animation:
+    cp-boot-logo-kedip .7s 1s steps(1) forwards,
+    cp-boot-logo-tebal .55s 1.35s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+@keyframes cp-boot-logo-kedip {
+  0%   { opacity: 1; }
+  8%   { opacity: 0; }
+  16%  { opacity: 1; }
+  22%  { opacity: .25; }
+  30%  { opacity: 1; }
+  42%  { opacity: 0; }
+  48%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* Tanpa keyframe "to": animasi berakhir di nilai --logo-tebal milik elemen. */
+@keyframes cp-boot-logo-tebal { from { --logo-tebal: 0px; } }
+
+html.cp-boot-jalan .cp-boot__logo .cp-logo__badan {
+  animation: cp-boot-guncang .7s 1s steps(1) both;
+}
+
+@keyframes cp-boot-guncang {
+  0%        { transform: skewX(-9deg) translate(-6px, 0); }
+  15%       { transform: skewX(-9deg) translate(5px, -2px); }
+  30%       { transform: skewX(-24deg) translate(-3px, 1px); }
+  45%       { transform: skewX(-9deg) translate(3px, 0) scaleX(1.06); }
+  60%       { transform: skewX(-9deg) translate(-1px, 0); }
+  75%, 100% { transform: skewX(-9deg); }
+}
+
+html.cp-boot-jalan .cp-boot__logo .cp-logo__badan::before {
+  animation: cp-boot-sobek-a .7s 1s steps(1) both;
+}
+
+html.cp-boot-jalan .cp-boot__logo .cp-logo__badan::after {
+  animation: cp-boot-sobek-b .7s 1s steps(1) both;
+}
+
+@keyframes cp-boot-sobek-a {
+  0%        { opacity: .9; transform: translateX(-8px); clip-path: inset(10% 0 62% 0); }
+  20%       { opacity: .9; transform: translateX(6px);  clip-path: inset(40% 0 35% 0); }
+  40%       { opacity: .9; transform: translateX(-4px); clip-path: inset(70% 0 8% 0); }
+  60%       { opacity: .9; transform: translateX(3px);  clip-path: inset(22% 0 55% 0); }
+  75%, 100% { opacity: 0;  transform: none; }
+}
+
+@keyframes cp-boot-sobek-b {
+  0%        { opacity: .9; transform: translateX(7px);  clip-path: inset(58% 0 16% 0); }
+  20%       { opacity: .9; transform: translateX(-5px); clip-path: inset(12% 0 70% 0); }
+  40%       { opacity: .9; transform: translateX(4px);  clip-path: inset(46% 0 30% 0); }
+  60%       { opacity: .9; transform: translateX(-3px); clip-path: inset(80% 0 4% 0); }
+  75%, 100% { opacity: 0;  transform: none; }
+}
+
+/* ---- batang muat + persen ---- */
+.cp-boot__muat {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  font-size: .75rem;
+  color: rgba(0, 240, 255, .8);
+  opacity: 0;
+}
+
+html.cp-boot-jalan .cp-boot__muat { animation: cp-boot-muncul .01s .45s forwards; }
+
+.cp-boot__batang {
+  flex: 1;
+  height: 8px;
+  padding: 1px;
+  border: 1px solid rgba(0, 240, 255, .4);
+}
+
+/* Isinya dibuka dengan clip-path, bukan scaleX, supaya ruas-ruasnya tidak
+   ikut gepeng selama animasi. */
+.cp-boot__batang i {
+  display: block;
+  height: 100%;
+  background: repeating-linear-gradient(90deg, var(--cp-cyan) 0 6px, transparent 6px 8px);
+  clip-path: inset(0 100% 0 0);
+}
+
+html.cp-boot-jalan .cp-boot__batang i {
+  animation: cp-boot-isi 1.5s .45s cubic-bezier(.5, 0, .2, 1) forwards;
+}
+
+@keyframes cp-boot-isi {
+  0%   { clip-path: inset(0 100% 0 0); }
+  35%  { clip-path: inset(0 58% 0 0); }
+  50%  { clip-path: inset(0 54% 0 0); }   /* sempat tersendat */
+  100% { clip-path: inset(0 0 0 0); }
+}
+
+.cp-boot__persen {
+  min-width: 4ch;
+  text-align: right;
+}
+
+.cp-boot__persen::after {
+  content: counter(boot-persen) '%';
+  counter-reset: boot-persen var(--boot-persen);
+}
+
+html.cp-boot-jalan .cp-boot__persen::after {
+  animation: cp-boot-hitung 1.5s .45s cubic-bezier(.5, 0, .2, 1) forwards;
+}
+
+@keyframes cp-boot-hitung {
+  0%   { --boot-persen: 0; }
+  35%  { --boot-persen: 42; }
+  50%  { --boot-persen: 46; }
+  100% { --boot-persen: 100; }
+}
+
+/* ---- petunjuk lewati: teks berbeda untuk layar sentuh ---- */
+.cp-boot__lewati {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 1.5rem;
+  z-index: 1;
+  margin: 0;
+  padding: 0 1rem;
+  text-align: center;
+  font-size: .6875rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(252, 238, 10, .6);
+  opacity: 0;
+}
+
+html.cp-boot-jalan .cp-boot__lewati { animation: cp-boot-muncul .3s .8s forwards; }
+
+.cp-boot__lewati-sentuh { display: none; }
+
+@media (hover: none) {
+  .cp-boot__lewati-klik   { display: none; }
+  .cp-boot__lewati-sentuh { display: inline; }
+}
+
+@keyframes cp-boot-muncul { to { opacity: 1; } }
+
+/* ---- keluar: isi padam ala CRT, garis berkilat, panel membelah ---- */
+html.cp-boot-keluar .cp-boot__layar {
+  animation: cp-boot-layar-padam .28s cubic-bezier(.7, 0, .8, .3) forwards;
+}
+
+/* Kalau dilewati sebelum sempat jalan, isinya memang belum pernah tampil. */
+html.cp-boot-jalan.cp-boot-keluar .cp-boot__layar { opacity: 1; }
+
+@keyframes cp-boot-layar-padam {
+  60%  { transform: scale(1, .01); }
+  100% { opacity: 0; transform: scale(0, .01); }
+}
+
+html.cp-boot-keluar .cp-boot__garis {
+  animation: cp-boot-garis-padam .45s .1s ease-out both;
+}
+
+@keyframes cp-boot-garis-padam {
+  0%   { opacity: 0; transform: scaleX(1); }
+  30%  { opacity: 1; transform: scaleX(1); }
+  100% { opacity: 0; transform: scaleX(0); }
+}
+
+html.cp-boot-keluar .cp-boot__lewati { animation: none; opacity: 0; }
+
+html.cp-boot-keluar .cp-boot::before {
+  animation: cp-boot-belah-atas .42s .22s cubic-bezier(.8, 0, .2, 1) forwards;
+}
+
+html.cp-boot-keluar .cp-boot::after {
+  animation: cp-boot-belah-bawah .42s .22s cubic-bezier(.8, 0, .2, 1) forwards;
+}
+
+@keyframes cp-boot-belah-atas {
+  15%  { transform: translate(-12px, -3%); }
+  30%  { transform: translate(6px, -8%); }
+  100% { transform: translate(0, -101%); }
+}
+
+@keyframes cp-boot-belah-bawah {
+  15%  { transform: translate(12px, 3%); }
+  30%  { transform: translate(-6px, 8%); }
+  100% { transform: translate(0, 101%); }
+}
+
+/* Lapis kedua: skrip di <head> sudah tidak memasang cp-boot-on untuk
+   pengguna ini; aturan ini berjaga kalau preferensinya berubah di tengah. */
+@media (prefers-reduced-motion: reduce) {
+  html.cp-boot-on .cp-boot { display: none; }
 }
