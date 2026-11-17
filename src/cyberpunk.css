@@ -2394,16 +2394,19 @@ html.cp-reveal-on .sk-terminal.cp-in .sk-baris {
    bertumpuk satu kolom dan section ini +-3200px. Di HP dibuat dua kolom; isi
    kartu dikecilkan seperlunya. Gambar tetap 4:3 dan tetap bisa diketuk untuk
    dibuka penuh di lightbox, jadi pratinjau kecil tidak mengurangi isi. */
+
+/* Di semua lebar: kartu mengisi penuh tinggi selnya, supaya kartu sebaris sama
+   tinggi walau panjang judulnya beda (terukur 202 vs 269px di 390px, dan 334 vs
+   355px di baris pertama desktop 1440px). */
+.cert-card { height: 100%; }
+
 @media (max-width: 639px) {
   .cert-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: .875rem .75rem;
   }
 
-  /* height: 100% - tanpa ini kartu sebaris tingginya beda jauh (terukur 202
-     vs 269px di 390px) karena panjang judulnya beda, tepi bawahnya bergerigi. */
   .cert-card {
-    height: 100%;
     clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
   }
 
