@@ -239,8 +239,8 @@ var DAFTAR_SERTIFIKAT = [
     var wadah = document.querySelector('#cert-grid');
     if (!wadah) return;
 
-    var BULAN = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    var BULAN = ['January', 'February', 'March', 'April', 'May', 'June',
+                 'July', 'August', 'September', 'October', 'November', 'December'];
 
     function tanggalTampil(iso) {
         var p = iso.split('-');
