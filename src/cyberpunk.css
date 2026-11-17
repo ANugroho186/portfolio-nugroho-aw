@@ -2085,3 +2085,107 @@ html.cp-boot-keluar .cp-boot::after {
 
   .pf-tombol:hover .pf-panah { transform: none; }
 }
+
+/* ===== 34. HERO: KALIMAT BUKTI + DUA TOMBOL =====
+   Kalimat di bawah baris peran dulu slogan merah "Focus on YOUR GOAL". Merah
+   #CF0033 di atas latar #23232b kontrasnya hanya 2,75:1 - cukup untuk dua kata
+   hiasan, tidak untuk satu kalimat. Jadi kalimatnya terang (+-13:1) dengan
+   sorotan kuning, dan aksen merah berkedip pindah ke tanda ">" di depannya.
+   Tombol kedua bergaris biasa, tanpa clip-path: clip-path ikut memotong garis
+   tepi di sudut dan outline fokus keyboard. */
+.hero-bukti {
+  max-width: 34rem;
+  margin: 0 0 2.25rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .9375rem;
+  line-height: 1.65;
+  color: rgba(236, 236, 237, .86);
+}
+
+.hero-bukti b {
+  font-weight: 700;
+  color: var(--cp-yellow);
+}
+
+.hero-tanda {
+  display: inline-block;
+  margin-right: .25rem;
+  font-weight: 800;
+  color: #CF0033;
+}
+
+.hero-aksi {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .875rem 1rem;
+}
+
+.hero-unduh {
+  display: inline-flex;
+  align-items: center;
+  gap: .625rem;
+  min-height: 3rem;
+  padding: 0 1.5rem 0 1.375rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--cp-cyan);
+  /* Pekat, bukan transparan: garis dekorasi .cp-bars di desktop lewat tepat
+     di belakang tombol ini dan tadinya terlihat menembus teksnya. */
+  background: #23232b linear-gradient(rgba(0, 240, 255, .05), rgba(0, 240, 255, .05));
+  border: 1px solid rgba(0, 240, 255, .55);
+  border-left-width: 3px;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+}
+
+.hero-unduh__ikon {
+  width: .875rem;
+  height: .875rem;
+  flex: none;
+  transition: transform .2s ease;
+}
+
+.hero-unduh:focus-visible {
+  outline: 2px solid var(--cp-yellow);
+  outline-offset: 3px;
+}
+
+.hero-unduh:active {
+  color: var(--cp-black);
+  background: var(--cp-cyan);
+}
+
+@media (hover: hover) {
+  .hero-unduh:hover {
+    color: var(--cp-black);
+    background: var(--cp-cyan);
+    border-color: var(--cp-cyan);
+  }
+
+  .hero-unduh:hover .hero-unduh__ikon { transform: translateY(2px); }
+}
+
+/* Di HP: kedua tombol berbagi satu baris kalau muat (390px), atau masing-masing
+   selebar penuh (320px) - bukan dua tombol beda lebar menumpuk rata kiri. */
+@media (max-width: 480px) {
+  .hero-aksi > a {
+    flex: 1 1 auto;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-aksi > .cp-btn { padding-left: 1.25rem; padding-right: 1.25rem; }
+  .hero-unduh { padding: 0 1rem 0 .875rem; }
+}
+
+@media (min-width: 1024px) {
+  .hero-bukti { font-size: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-unduh,
+  .hero-unduh__ikon { transition: none; }
+
+  .hero-unduh:hover .hero-unduh__ikon { transform: none; }
+}
