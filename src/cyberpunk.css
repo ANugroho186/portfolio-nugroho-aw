@@ -2092,8 +2092,8 @@ html.cp-boot-keluar .cp-boot::after {
    hiasan, tidak untuk satu kalimat. Jadi kalimatnya terang (+-13:1) dengan
    sorotan kuning, dan aksen merah berkedip pindah ke tanda ">" di depannya.
    Dua tombol berwarna sama (cyan #06cfce, teks gelap) dan sama-sama jadi kuning
-   saat hover, tapi bentuknya beda: "View projects" bersudut terpotong (.cp-btn),
-   "Download CV" persegi dengan garis gelap di kiri. Tombol kedua tanpa
+   saat hover, tapi bentuknya beda: "View projects" bersudut terpotong (.cp-btn,
+   warna hover-nya di blok 37), "Download CV" persegi dengan garis gelap di kiri. Tombol kedua tanpa
    clip-path karena clip-path ikut memotong outline fokus keyboard.
    JANGAN pasang hover:scale-* pada .cp-btn: animasi getar cp-btn-jitter menimpa
    transform selama +-0,84 detik, lalu skala baru berlaku dan tombol tiba-tiba
@@ -2151,15 +2151,11 @@ html.cp-boot-keluar .cp-boot::after {
   transition: transform .2s ease;
 }
 
-/* Fokus keyboard juga kuning: outline .cp-btn terpotong clip-path, jadi
-   warnanya yang menandai. */
 .hero-unduh:focus-visible {
   outline: 2px solid var(--cp-yellow);
   outline-offset: 3px;
 }
 
-.hero-utama:focus-visible,
-.hero-utama:active,
 .hero-unduh:focus-visible,
 .hero-unduh:active {
   color: var(--cp-black);
@@ -2167,7 +2163,6 @@ html.cp-boot-keluar .cp-boot::after {
 }
 
 @media (hover: hover) {
-  .hero-utama:hover,
   .hero-unduh:hover {
     color: var(--cp-black);
     background: var(--cp-yellow);
@@ -2442,4 +2437,26 @@ html.cp-reveal-on .sk-terminal.cp-in .sk-baris {
   /* Siku hover di blok 19 menonjol 7px; jarak antarkartu kini 12px. */
   .cert-item::before { top: -5px; left: -5px; }
   .cert-item::after { bottom: -5px; right: -5px; }
+}
+
+/* ===== 37. TOMBOL CYBER: WARNA HOVER KUNING =====
+   Dipakai dua .cp-btn: "View projects" di hero dan "Send Message" di Contact.
+   Dulu keduanya memakai kelas Tailwind hover:scale-110 + hover:text-white di
+   atas latar kuning. Skala itu tertahan animasi getar cp-btn-jitter (blok 4)
+   selama +-0,84 detik lalu tiba-tiba berlaku, jadi tombol membesar setelah
+   hover lama; teks putih di atas kuning kontrasnya +-1,2:1. Sekarang warnanya
+   diatur di sini saja dan ukurannya tidak pernah berubah.
+   Fokus keyboard ikut kuning: outline .cp-btn terpotong clip-path, jadi warna
+   latarnya yang menandai fokus. */
+.cp-btn:focus-visible,
+.cp-btn:active {
+  color: var(--cp-black);
+  background: var(--cp-yellow);
+}
+
+@media (hover: hover) {
+  .cp-btn:hover {
+    color: var(--cp-black);
+    background: var(--cp-yellow);
+  }
 }
