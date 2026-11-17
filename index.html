@@ -116,6 +116,9 @@
                                 <a href="#about" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary cp-nav cp-glitch" style="font-family: JetBrains Mono, serif;">About</a>
                             </li>
                             <li class="group">
+                                <a href="#skills" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary cp-nav cp-glitch" style="font-family: JetBrains Mono, serif;">Skills</a>
+                            </li>
+                            <li class="group">
                                 <a href="#portfolio" class="text-base text-youngcyan py-2 mx-8 flex group-hover:text-primary cp-nav cp-glitch" style="font-family: JetBrains Mono, serif;">Portfolio</a>
                             </li>
                             <li class="group">
@@ -303,6 +306,71 @@
     </section>
 
     <!-- About Section End -->
+
+    <!-- Skills Section Start -->
+    <section id="skills" class="pt-36 pb-16">
+        <div class="container">
+            <div class="w-full px-4">
+                <div class="cp-reveal cp-reveal-slice max-w-xl mx-auto text-center mb-16">
+                    <h4 class="font-semibold text-lg text-primary cp-glitch mb-2" style="font-family: JetBrains Mono, serif;">[<span class="text-youngcyan">Skills</span>]</h4>
+                    <h2 class="font-bold text-youngcyan text-3xl mb-4 sm:text-4xl lg:text-5xl">Tech Stack</h2>
+                    <p class="font-medium text-md text-white md:text-lg">What I have actually used, grouped by category, with where each one was used.</p>
+                </div>
+            </div>
+            <!-- Daftar skill bergaya jendela terminal: satu baris per kategori, skill sebagai chip,
+                 dan baris "used in" yang menunjuk ke bukti (project, magang, sertifikat).
+                 Sengaja tanpa persentase. Gayanya di blok 35 src/cyberpunk.css. -->
+            <div class="px-4">
+                <div class="sk-terminal cp-reveal">
+                    <div class="sk-bilah" aria-hidden="true">
+                        <span class="sk-alamat">naw@portfolio:~/skills</span>
+                        <span class="sk-lampu"><i></i><i></i><i></i></span>
+                    </div>
+                    <div class="sk-isi">
+                        <p class="sk-perintah" aria-hidden="true"><span class="sk-prompt">$</span>skills --by-category</p>
+                        <dl class="sk-daftar">
+                            <div class="sk-baris" style="--i: 0">
+                                <dt>languages</dt>
+                                <dd>
+                                    <ul class="sk-chip"><li>PHP</li><li>JavaScript</li><li>Python</li><li>Java</li><li>C++</li><li>SQL</li><li>HTML/CSS</li></ul>
+                                    <p class="sk-bukti"><span aria-hidden="true">&#8627; </span>used in: <a href="#portfolio">thesis</a> &amp; <a href="#journey">internship</a> (PHP), <a href="#portfolio">NLP research</a> (Python)</p>
+                                </dd>
+                            </div>
+                            <div class="sk-baris" style="--i: 1">
+                                <dt>frameworks</dt>
+                                <dd>
+                                    <ul class="sk-chip"><li>Laravel</li><li>React</li><li>Tailwind CSS</li><li>Bootstrap</li><li>jQuery</li></ul>
+                                    <p class="sk-bukti"><span aria-hidden="true">&#8627; </span>used in: <a href="#portfolio">Laravel 12 thesis app</a>, <a href="#certificate">HackerRank React certificate</a>, this site (Tailwind)</p>
+                                </dd>
+                            </div>
+                            <div class="sk-baris" style="--i: 2">
+                                <dt>analysis &amp; design</dt>
+                                <dd>
+                                    <ul class="sk-chip"><li>UML</li><li>Requirements analysis</li><li>OOAD</li><li>Figma</li><li>HTA</li><li>PACT</li></ul>
+                                    <p class="sk-bukti"><span aria-hidden="true">&#8627; </span>used in: <a href="#portfolio">projects 02&ndash;04</a>, <a href="#certificate">BNSP software engineering certificate</a></p>
+                                </dd>
+                            </div>
+                            <div class="sk-baris" style="--i: 3">
+                                <dt>data &amp; research</dt>
+                                <dd>
+                                    <ul class="sk-chip"><li>MySQL/MariaDB</li><li>Genetic algorithms</li><li>NSGA-II</li><li>Deep learning (NLP)</li></ul>
+                                    <p class="sk-bukti"><span aria-hidden="true">&#8627; </span>used in: <a href="#portfolio">thesis scheduler</a>, <a href="#portfolio">sentiment analysis research</a></p>
+                                </dd>
+                            </div>
+                            <div class="sk-baris" style="--i: 4">
+                                <dt>tools</dt>
+                                <dd>
+                                    <ul class="sk-chip"><li>Git</li><li>GitHub</li></ul>
+                                </dd>
+                            </div>
+                        </dl>
+                        <p class="sk-perintah" aria-hidden="true"><span class="sk-prompt">$</span><span class="sk-kursor"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Skills Section End -->
 
     <!-- Portfolio Section Start -->
 
@@ -573,6 +641,9 @@
                         </li>
                         <li>
                             <a href="#about" class="inline-block text-base hover:text-primary cp-glitch mb-3">About</a>
+                        </li>
+                        <li>
+                            <a href="#skills" class="inline-block text-base hover:text-primary cp-glitch mb-3">Skills</a>
                         </li>
                         <li>
                             <a href="#portfolio" class="inline-block text-base hover:text-primary cp-glitch mb-3">Portfolio</a>

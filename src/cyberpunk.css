@@ -2189,3 +2189,197 @@ html.cp-boot-keluar .cp-boot::after {
 
   .hero-unduh:hover .hero-unduh__ikon { transform: none; }
 }
+
+/* ===== 35. SKILLS: JENDELA TERMINAL =====
+   Satu jendela terminal statis, satu baris per kategori. Sengaja tanpa bar
+   persentase (angka yang dinilai sendiri tidak dipercaya perekrut); gantinya
+   tiap kategori punya baris "used in" yang menautkan ke buktinya. Bentuk ini
+   beda dari Portfolio (berkas kasus), Journey (linimasa), dan Certificate
+   (grid kartu). Isi dipilih pemilik 17-11-2026, hanya dari yang sudah tertulis
+   di situs, README skripsi, dan sertifikat. */
+.sk-terminal {
+  max-width: 56rem;
+  margin: 0 auto;
+  background: rgba(11, 11, 16, .82);
+  border: 1px solid rgba(0, 240, 255, .32);
+  box-shadow: 0 18px 40px -22px rgba(0, 240, 255, .35);
+}
+
+.sk-bilah {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .5rem .875rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .75rem;
+  color: rgba(0, 240, 255, .78);
+  background: rgba(0, 240, 255, .07);
+  border-bottom: 1px solid rgba(0, 240, 255, .22);
+}
+
+.sk-alamat {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sk-lampu {
+  display: flex;
+  flex: none;
+  gap: .375rem;
+}
+
+.sk-lampu i {
+  display: block;
+  width: .625rem;
+  height: .625rem;
+}
+
+.sk-lampu i:nth-child(1) { background: var(--cp-red); }
+.sk-lampu i:nth-child(2) { background: var(--cp-yellow); }
+.sk-lampu i:nth-child(3) { background: var(--cp-cyan); }
+
+.sk-isi {
+  padding: 1rem 1rem 1.125rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.sk-perintah {
+  margin: 0;
+  font-size: .8125rem;
+  color: rgba(236, 236, 237, .62);
+}
+
+.sk-prompt {
+  margin-right: .5rem;
+  font-weight: 700;
+  color: var(--cp-yellow);
+}
+
+.sk-kursor {
+  display: inline-block;
+  width: .55em;
+  height: 1.05em;
+  vertical-align: -.2em;
+  background: var(--cp-cyan);
+  animation: sk-kedip 1.1s steps(1) infinite;
+}
+
+@keyframes sk-kedip { 50% { opacity: 0; } }
+
+.sk-daftar { margin: .75rem 0 .875rem; }
+
+.sk-baris {
+  display: grid;
+  gap: .5rem;
+  padding: .875rem 0;
+  border-bottom: 1px dashed rgba(0, 240, 255, .16);
+}
+
+.sk-baris dt {
+  font-size: .8125rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--cp-pink);
+}
+
+.sk-baris dt::after {
+  content: ':';
+  content: ':' / '';
+}
+
+.sk-baris dd {
+  min-width: 0;
+  margin: 0;
+}
+
+.sk-chip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .375rem .875rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: .9375rem;
+  line-height: 1.5;
+  color: #ececed;
+}
+
+.sk-chip li::before,
+.sk-chip li::after { color: rgba(0, 240, 255, .6); }
+
+.sk-chip li::before { content: '['; content: '[' / ''; margin-right: .1em; }
+.sk-chip li::after  { content: ']'; content: ']' / ''; margin-left: .1em; }
+
+.sk-bukti {
+  margin: .5rem 0 0;
+  font-size: .75rem;
+  line-height: 1.65;
+  color: rgba(236, 236, 237, .62);
+}
+
+.sk-bukti a {
+  color: var(--cp-cyan);
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  transition: color .2s ease;
+}
+
+.sk-bukti a:hover { color: var(--cp-yellow); }
+
+.sk-bukti a:focus-visible {
+  outline: 2px solid var(--cp-yellow);
+  outline-offset: 2px;
+}
+
+/* Baris muncul satu per satu begitu jendelanya terlihat. Hanya kalau JS aktif
+   (cp-reveal-on), jadi tanpa JS semua baris tetap terbaca. */
+html.cp-reveal-on .sk-terminal .sk-baris { opacity: 0; }
+
+html.cp-reveal-on .sk-terminal.cp-in .sk-baris {
+  animation: sk-muncul .35s cubic-bezier(.2, .7, .3, 1) both;
+  animation-delay: calc(.2s + var(--i, 0) * .09s);
+}
+
+@keyframes sk-muncul {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (min-width: 640px) {
+  .sk-isi { padding: 1.375rem 1.75rem 1.5rem; }
+
+  .sk-baris {
+    grid-template-columns: 11rem 1fr;
+    gap: 1.25rem;
+    align-items: baseline;
+  }
+}
+
+/* Di HP: chip sedikit lebih kecil dan jarak dirapatkan. Terukur di 390px
+   terminal 912px sebelum aturan ini. Teks bukti sengaja tidak dikecilkan. */
+@media (max-width: 639px) {
+  .sk-daftar { margin: .5rem 0 .625rem; }
+  .sk-baris { gap: .375rem; padding: .625rem 0; }
+
+  .sk-chip {
+    gap: .25rem .625rem;
+    font-size: .875rem;
+  }
+}
+
+@media (max-width: 767px) {
+  #skills { padding-top: 4.5rem; padding-bottom: 3rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sk-kursor { animation: none; }
+
+  html.cp-reveal-on .sk-terminal .sk-baris,
+  html.cp-reveal-on .sk-terminal.cp-in .sk-baris {
+    opacity: 1;
+    animation: none;
+  }
+}
