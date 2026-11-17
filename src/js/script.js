@@ -14,9 +14,36 @@ window.addEventListener("scroll", function () {
 const hamburger = document.querySelector('#hamburger');
 const navMenu = document.querySelector('#nav-menu');
 
+function aturMenu(buka) {
+    hamburger.classList.toggle('hamburger-active', buka);
+    navMenu.classList.toggle('hidden', !buka);
+    hamburger.setAttribute('aria-expanded', buka ? 'true' : 'false');
+}
+
 hamburger.addEventListener('click', function () {
-    hamburger.classList.toggle('hamburger-active');
-    navMenu.classList.toggle('hidden');
+    aturMenu(navMenu.classList.contains('hidden'));
+});
+
+// Menu HP ditutup lagi setelah tautannya diketuk, dengan Escape, atau dengan
+// ketukan di luar menu. Dulu tetap terbuka dan menutupi +-250x320px isi
+// halaman sampai tombolnya diketuk lagi. Di desktop menu selalu tampil
+// (lg:block), jadi kelas hidden di sini tidak berpengaruh.
+navMenu.addEventListener('click', function (e) {
+    if (e.target.closest('a')) aturMenu(false);
+});
+
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !navMenu.classList.contains('hidden')) {
+        aturMenu(false);
+        hamburger.focus();
+    }
+});
+
+document.addEventListener('click', function (e) {
+    if (!navMenu.classList.contains('hidden') &&
+        !navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+        aturMenu(false);
+    }
 });
 // ============================================================
 // Animasi muncul saat scroll (IntersectionObserver, tanpa library)
