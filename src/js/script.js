@@ -196,8 +196,9 @@ document.addEventListener('click', function (e) {
 //
 // >>> CARA MENAMBAH SERTIFIKAT BARU <<<
 // 1. Simpan gambarnya dua ukuran:
-//      src/img/cert/thumb/<nama-file>.jpg   (lebar 600 px, untuk kartu)
-//      src/img/cert/full/<nama-file>.jpg    (lebar 1500 px, untuk perbesar)
+//      src/img/cert/thumb/<nama-file>.webp  (lebar 600 px, untuk kartu; WebP lebih kecil ~40%)
+//      src/img/cert/full/<nama-file>.jpg    (lebar 1500 px, untuk perbesar; sengaja tetap
+//                                           JPEG supaya teks sertifikat tetap tajam dibaca)
 // 2. Salin satu blok { ... } di bawah, letakkan di mana saja dalam daftar.
 //    Urutannya diatur otomatis dari tanggal terbaru, jadi tidak perlu
 //    dipindah-pindah sendiri.
@@ -311,7 +312,7 @@ var DAFTAR_SERTIFIKAT = [
                ' data-tanggal="' + amankan(tanggalTampil(s.tanggal)) + '">' +
                  '<span class="cert-card__shot">' +
                    '<span class="cert-card__tag">' + amankan(LABEL_KATEGORI[s.kategori] || s.kategori) + '</span>' +
-                   '<img src="src/img/cert/thumb/' + amankan(s.berkas) + '.jpg" loading="lazy"' +
+                   '<img src="src/img/cert/thumb/' + amankan(s.berkas) + '.webp" loading="lazy"' +
                    ' alt="' + amankan(s.judul) + ' certificate from ' + amankan(s.penerbit) + '">' +
                  '</span>' +
                  '<span class="cert-card__body">' +
