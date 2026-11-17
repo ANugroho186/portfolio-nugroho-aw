@@ -1041,9 +1041,10 @@ html.js-cert .cert-bar {
    jadi yang berubah tiap frame hanya transform - murni kerja compositor,
    tidak ada layout ulang. Tanpa JS kartunya tetap tampil rata dan terbaca.
 
-   Isinya sengaja hanya data yang memang benar (nama, peran, jurusan, kampus).
-   Tidak ada nomor induk atau "clearance level" karangan: itu akan terbaca
-   seperti kartu identitas palsu, bukan hiasan. */
+   Isinya sengaja hanya data yang memang benar (nama, peran, jurusan, kampus,
+   dan email yang memang sudah publik di footer). Tidak ada nomor induk atau
+   "clearance level" karangan: itu akan terbaca seperti kartu identitas palsu,
+   bukan hiasan. */
 .idc {
   perspective: 900px;
 }
@@ -1138,6 +1139,37 @@ html.js-cert .cert-bar {
   font-size: .82rem;
   line-height: 1.5;
   color: rgba(236, 236, 237, .78);
+}
+
+/* Email: satu-satunya isi kartu yang bisa diklik. Di 320px isi kartu hanya
+   208px, sedangkan 28 karakter JetBrains Mono .82rem butuh +-220px; ukurannya
+   ikut lebar layar supaya tetap sebaris. Kalau tetap tidak muat (font cadangan
+   lebih lebar), <wbr> di HTML membuatnya patah tepat sebelum '@', dan
+   overflow-wrap hanya jaring pengaman terakhir. */
+.idc__email {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(.72rem, 3.6vw, .82rem);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.idc__email a {
+  color: var(--cp-cyan);
+  text-decoration: underline;
+  text-decoration-color: rgba(0, 240, 255, .4);
+  text-underline-offset: 3px;
+  transition: color .2s ease, text-decoration-color .2s ease;
+}
+
+.idc__email a:hover,
+.idc__email a:focus-visible {
+  color: var(--cp-yellow);
+  text-decoration-color: currentColor;
+}
+
+.idc__email a:focus-visible {
+  outline: 2px solid var(--cp-yellow);
+  outline-offset: 3px;
 }
 
 .idc__foot {
@@ -2462,4 +2494,285 @@ html.cp-reveal-on .sk-terminal.cp-in .sk-baris {
     color: var(--cp-black);
     background: var(--cp-yellow);
   }
+}
+
+/* ===== 38. FOOTER: TIGA KOLOM =====
+   Dulu footer hanya berisi kolom "Navigate" (email + lokasi) dan daftar tujuh
+   tautan yang memanjang ke bawah, jadi separuh lebarnya kosong. Sekarang:
+     1. identitas: logo [NAW], peran, status terbuka, tombol CV;
+     2. Navigate: tujuh tautan dalam dua kolom;
+     3. Contact: email, lokasi, ikon sosial;
+   lalu baris bawah berisi hak cipta dan kredit.
+   Susunan: satu kolom di HP; 768-1023px identitas | Navigate dengan Contact
+   selebar penuh di bawahnya (tiga kolom terlalu sempit untuk alamat email);
+   1024px ke atas tiga kolom.
+   Tombol dan tautan di sini sengaja tanpa clip-path supaya outline fokus
+   keyboard tidak terpotong. */
+.ft {
+  padding: 4.5rem 0 2.5rem;
+  border-top: 1px solid rgba(0, 240, 255, .16);
+}
+
+.ft-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.75rem;
+}
+
+/* Kolom 1: identitas */
+.ft-logo {
+  display: inline-block;
+  font-size: 1.875rem;
+  line-height: 1;
+  margin-bottom: 1.1rem;
+}
+
+.ft-peran {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #ececed;
+}
+
+/* Bagian kedua peran pindah baris utuh; tanpa nowrap, di 768px "UI/UX"
+   tertinggal sendirian di baris kedua. */
+.ft-peran span { color: #06cfce; white-space: nowrap; }
+
+.ft-status {
+  display: flex;
+  align-items: flex-start;
+  gap: .6rem;
+  margin-top: .85rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .75rem;
+  letter-spacing: .04em;
+  line-height: 1.5;
+  color: rgba(236, 236, 237, .78);
+}
+
+/* Titik sejajar baris pertama kalau teksnya terlipat dua baris:
+   (tinggi baris 18px - titik 7px) / 2 = 5,5px. */
+.ft-status i {
+  flex: none;
+  margin-top: 5.5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #35e07a;
+  box-shadow: 0 0 8px rgba(53, 224, 122, .9);
+}
+
+.ft-cv {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  margin-top: 1.25rem;
+  padding: .6rem 1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--cp-cyan);
+  background: rgba(0, 240, 255, .06);
+  border: 1px solid rgba(0, 240, 255, .55);
+  transition: color .2s ease, background-color .2s ease, border-color .2s ease;
+}
+
+.ft-cv__ikon {
+  flex: none;
+  width: .75rem;
+  height: .75rem;
+}
+
+.ft-cv:focus-visible,
+.ft-cv:active {
+  color: var(--cp-black);
+  background: var(--cp-yellow);
+  border-color: var(--cp-yellow);
+}
+
+@media (hover: hover) {
+  .ft-cv:hover {
+    color: var(--cp-black);
+    background: var(--cp-yellow);
+    border-color: var(--cp-yellow);
+  }
+}
+
+/* Judul kolom: label mono kuning + garis HUD yang memudar ke kanan */
+.ft-judul {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-bottom: 1.1rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--cp-yellow);
+}
+
+.ft-judul::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(0, 240, 255, .45), transparent);
+}
+
+/* Kolom 2: tautan dua kolom, diawali tanda prompt '>' yang tidak dibacakan */
+.ft-tautan {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, max-content));
+  column-gap: 2.75rem;
+  row-gap: .35rem;
+}
+
+.ft-tautan a {
+  display: inline-block;
+  padding: .2rem 0;
+  font-size: .95rem;
+  color: rgba(236, 236, 237, .85);
+}
+
+.ft-tautan a::before {
+  content: '>';
+  content: '>' / '';
+  margin-right: .5em;
+  font-family: 'JetBrains Mono', monospace;
+  color: rgba(0, 240, 255, .55);
+  transition: color .15s ease;
+}
+
+.ft-tautan a:hover,
+.ft-tautan a:focus-visible,
+.ft-tautan a:hover::before,
+.ft-tautan a:focus-visible::before { color: var(--cp-yellow); }
+
+/* Kolom 3: kontak + ikon sosial */
+.ft-kontak li {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  font-size: .95rem;
+  line-height: 1.5;
+  color: rgba(236, 236, 237, .85);
+}
+
+.ft-kontak li + li { margin-top: .6rem; }
+
+.ft-kontak__ikon {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  color: var(--cp-cyan);
+}
+
+.ft-kontak a {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(0, 240, 255, .4);
+  text-underline-offset: 3px;
+  transition: color .2s ease, text-decoration-color .2s ease;
+}
+
+.ft-kontak a:hover,
+.ft-kontak a:focus-visible {
+  color: var(--cp-yellow);
+  text-decoration-color: currentColor;
+}
+
+.ft-sosial {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-top: 1.4rem;
+}
+
+.ft-sosial a {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #ececed;
+  border: 1px solid rgba(0, 240, 255, .35);
+  background: rgba(0, 240, 255, .04);
+  transition: color .2s ease, border-color .2s ease;
+}
+
+.ft-sosial a:hover,
+.ft-sosial a:focus-visible {
+  color: var(--cp-yellow);
+  border-color: var(--cp-yellow);
+}
+
+.ft-sosial__ikon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* Baris bawah */
+.ft-bawah {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: .4rem 1.5rem;
+  margin: 3rem 1rem 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(0, 240, 255, .16);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .75rem;
+  letter-spacing: .04em;
+  line-height: 1.6;
+  color: rgba(236, 236, 237, .62);
+}
+
+.ft-bawah a {
+  color: var(--cp-cyan);
+  transition: color .2s ease;
+}
+
+.ft-bawah a:hover,
+.ft-bawah a:focus-visible { color: var(--cp-yellow); }
+
+.ft a:focus-visible {
+  outline: 2px solid var(--cp-yellow);
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .ft-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 3rem;
+  }
+
+  .ft-kolom--kontak {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 2rem;
+    align-items: center;
+  }
+
+  .ft-kolom--kontak .ft-judul { grid-column: 1 / -1; }
+
+  .ft-kolom--kontak .ft-sosial { margin-top: 0; }
+}
+
+@media (min-width: 1024px) {
+  .ft-grid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, .9fr) minmax(0, 1.15fr);
+    column-gap: 3.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ft-cv,
+  .ft-tautan a::before,
+  .ft-kontak a,
+  .ft-sosial a,
+  .ft-bawah a { transition: none; }
 }
