@@ -2091,8 +2091,13 @@ html.cp-boot-keluar .cp-boot::after {
    #CF0033 di atas latar #23232b kontrasnya hanya 2,75:1 - cukup untuk dua kata
    hiasan, tidak untuk satu kalimat. Jadi kalimatnya terang (+-13:1) dengan
    sorotan kuning, dan aksen merah berkedip pindah ke tanda ">" di depannya.
-   Tombol kedua bergaris biasa, tanpa clip-path: clip-path ikut memotong garis
-   tepi di sudut dan outline fokus keyboard. */
+   Dua tombol berwarna sama (cyan #06cfce, teks gelap) dan sama-sama jadi kuning
+   saat hover, tapi bentuknya beda: "View projects" bersudut terpotong (.cp-btn),
+   "Download CV" persegi dengan garis gelap di kiri. Tombol kedua tanpa
+   clip-path karena clip-path ikut memotong outline fokus keyboard.
+   JANGAN pasang hover:scale-* pada .cp-btn: animasi getar cp-btn-jitter menimpa
+   transform selama +-0,84 detik, lalu skala baru berlaku dan tombol tiba-tiba
+   membesar (terukur 189x48 -> 208x53px saat hover lama). */
 .hero-bukti {
   max-width: 34rem;
   margin: 0 0 2.25rem;
@@ -2130,13 +2135,13 @@ html.cp-boot-keluar .cp-boot::after {
   font-family: 'JetBrains Mono', monospace;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--cp-cyan);
-  /* Pekat, bukan transparan: garis dekorasi .cp-bars di desktop lewat tepat
-     di belakang tombol ini dan tadinya terlihat menembus teksnya. */
-  background: #23232b linear-gradient(rgba(0, 240, 255, .05), rgba(0, 240, 255, .05));
-  border: 1px solid rgba(0, 240, 255, .55);
-  border-left-width: 3px;
-  transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+  color: #23232b;
+  /* Harus pekat: garis dekorasi .cp-bars di desktop lewat tepat di belakang
+     tombol ini. Garis gelap di kiri = pembeda bentuk dari tombol pertama. */
+  background: #06cfce;
+  box-shadow: inset 4px 0 0 rgba(11, 11, 16, .45);
+  padding-left: 1.625rem;
+  transition: background-color .2s ease, color .2s ease;
 }
 
 .hero-unduh__ikon {
@@ -2146,21 +2151,26 @@ html.cp-boot-keluar .cp-boot::after {
   transition: transform .2s ease;
 }
 
+/* Fokus keyboard juga kuning: outline .cp-btn terpotong clip-path, jadi
+   warnanya yang menandai. */
 .hero-unduh:focus-visible {
   outline: 2px solid var(--cp-yellow);
   outline-offset: 3px;
 }
 
+.hero-utama:focus-visible,
+.hero-utama:active,
+.hero-unduh:focus-visible,
 .hero-unduh:active {
   color: var(--cp-black);
-  background: var(--cp-cyan);
+  background: var(--cp-yellow);
 }
 
 @media (hover: hover) {
+  .hero-utama:hover,
   .hero-unduh:hover {
     color: var(--cp-black);
-    background: var(--cp-cyan);
-    border-color: var(--cp-cyan);
+    background: var(--cp-yellow);
   }
 
   .hero-unduh:hover .hero-unduh__ikon { transform: translateY(2px); }
@@ -2176,7 +2186,7 @@ html.cp-boot-keluar .cp-boot::after {
   }
 
   .hero-aksi > .cp-btn { padding-left: 1.25rem; padding-right: 1.25rem; }
-  .hero-unduh { padding: 0 1rem 0 .875rem; }
+  .hero-unduh { padding: 0 1rem 0 1.125rem; }
 }
 
 @media (min-width: 1024px) {
