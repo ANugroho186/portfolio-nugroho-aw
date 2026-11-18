@@ -2130,6 +2130,11 @@ html.cp-boot-keluar .cp-boot::after {
    JANGAN pasang hover:scale-* pada .cp-btn: animasi getar cp-btn-jitter menimpa
    transform selama +-0,84 detik, lalu skala baru berlaku dan tombol tiba-tiba
    membesar (terukur 189x48 -> 208x53px saat hover lama). */
+
+/* Bagian kedua baris peran ("| Backend Developer") pindah baris utuh. Tanpa
+   nowrap, di 320-390px "Developer" tertinggal sendirian di baris kedua. */
+#home h2 > span { white-space: nowrap; }
+
 .hero-bukti {
   max-width: 34rem;
   margin: 0 0 2.25rem;
@@ -2534,8 +2539,8 @@ html.cp-reveal-on .sk-terminal.cp-in .sk-baris {
   color: #ececed;
 }
 
-/* Bagian kedua peran pindah baris utuh; tanpa nowrap, di 768px "UI/UX"
-   tertinggal sendirian di baris kedua. */
+/* Bagian kedua peran ("| Backend Developer") pindah baris utuh, tidak terbelah;
+   dulu di 768px "UI/UX" tertinggal sendirian di baris kedua. */
 .ft-peran span { color: #06cfce; white-space: nowrap; }
 
 .ft-status {
